@@ -14,7 +14,7 @@ function availabilityFunc() {
 
   recognition = new SpeechRecognition();
   recognition.lang = 'ko';
-  recognition.maxAlternatives = 5;
+  recognition.maxAlternatives = 1;
   recognition.continuous = false;
   recognition.interimResults = false;
 }
@@ -26,8 +26,6 @@ function startRecord() {
 
   recordButton.disabled = true;
   searchArea.value = '';
-  recognition.onstart = () => console.log('🎤 듣는 중...');
-
   recognition.onspeechend = () => {
     recognition.stop();
   };
@@ -39,6 +37,8 @@ function startRecord() {
 
   recognition.onerror = (event) => {
     recordButton.disabled = false;
+    alert('음성 인식에 실패했습니다. 다시 시도해주세요.');
+    console.error('음성 인식 오류:', event.error);
   };
 
   recognition.onend = () => {
