@@ -1,72 +1,71 @@
-.head-line{
-    margin-top: 1em;
-    display:flex;
-    justify-content: center;
+.head-line {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
 }
 
-.menus{
-    margin-top: 1em;
-    display: flex;
-    justify-content: center;
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
+.menus {
+  margin-top: 1em;
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
-.book-image-size{
-    max-width: 100%;
-    max-height: 250px;
-    margin-right: 1em;
-    text-align: center;
+.book-image-size {
+  max-width: 100%;
+  max-height: 250px;
+  margin-right: 1em;
+  text-align: center;
 }
 
-.books{
-    display: flex;
-    padding: 1em;
-    border-bottom:2px solid black;
+.books {
+  display: flex;
+  padding: 1em;
+  border-bottom: 2px solid black;
 }
 
-.book-detail{
-    display:flex;
-    justify-content: space-between;
+.book-detail {
+  display: flex;
+  justify-content: space-between;
 }
 
-.result-text{
-    margin-top:1em;
-    display:flex;
-    justify-content:left;
-    gap:10px;
+.result-text {
+  margin-top: 1em;
+  display: flex;
+  justify-content: left;
+  gap: 10px;
 }
 
+.page-item.active .page-link {
+  background-color: burlywood;
+  color: white;
+  border-color: burlywood;
+}
+.page-link {
+  color: burlywood;
+}
+.col-lg-8 {
+  margin-top: 1em;
+}
 
-  .page-item.active .page-link{
-    background-color: burlywood;
-    color: white;
-    border-color: burlywood;
-}
-.page-link{
-    color:burlywood
-}
-.col-lg-8{
-    margin-top:1em
-}
-
-.pagination{
-    margin-top: 1em;
-    margin-bottom: 3em;
-    display: flex;
-    justify-content: center;
+.pagination {
+  margin-top: 1em;
+  margin-bottom: 3em;
+  display: flex;
+  justify-content: center;
 }
 
 #loadingSpinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border: 4px solid rgba(0, 0, 0, 0.8);
-    border-top: 4px solid #ffffff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 4px solid rgba(0, 0, 0, 0.8);
+  border-top: 4px solid #ffffff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  display: none;
 }
