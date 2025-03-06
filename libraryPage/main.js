@@ -37,18 +37,22 @@ function libsRender() {
     <div class="info">
       <dl>
         <div>
+        <i class="fa-solid fa-phone"></i>
           <dt class="col-lg-1" id="lib-call">전화번호</dt>
           <dd class="col-lg-10">${libs.lib.tel}</dd>
         </div>
         <div>
+        <i class="fa-solid fa-location-dot"></i>
           <dt class="col-lg-1" id="lib-address">주소</dt>
           <dd class="col-lg-10">${libs.lib.address}</dd>
         </div>
         <div>
+        <i class="fa-solid fa-clock"></i>
           <dt class="col-lg-1" id="lib-time">영업시간</dt>
           <dd class="col-lg-10">${libs.lib.operatingTime}</dd>
         </div>
         <div>
+        <i class="fa-solid fa-calendar-minus"></i>
           <dt class="col-lg-1" id="lib-close-day">휴관일</dt>
           <dd class="col-lg-10">${libs.lib.closed}</dd>
         </div>
