@@ -1,6 +1,33 @@
 .libs {
-  margin: 5px;
+  margin: 10px;
   padding: 10px;
+  padding-bottom: 0px;
   border: 1px solid black;
+  width: 90%;
+}
+
+#lib-name {
+  position: relative;
+  border-bottom: 1px solid palevioletred;
   width: 100%;
+  padding: 20px;
+  margin-bottom: 20px;
+  font-size: 30px;
+  color: palevioletred;
+}
+
+.info dl {
+  border: 3px solid green;
+  display: block;
+  padding: 0px 20px;
+}
+
+.info dt {
+  border: solid 1px red;
+  display: inline-block;
+}
+
+.info dd {
+  border: 1px solid blue;
+  display: inline-block;
 }

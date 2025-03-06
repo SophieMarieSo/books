@@ -26,9 +26,36 @@ const getLibList = async () => {
   //   data.response.libs.forEach((item) => {
   //     console.log("libList", item.lib);
   //   });
+  libsRender();
 };
 getLibList();
 
 function libsRender() {
-  const libListHTML = libList.map();
+  const libListHTML = libList.map(
+    (libs) => `<div class="row libs">
+    <div class="col-lg-8" id="lib-name">${libs.lib.libName}</div>
+    <div class="info">
+      <dl>
+        <div>
+          <dt class="col-lg-1" id="lib-call">전화번호</dt>
+          <dd class="col-lg-10">${libs.lib.tel}</dd>
+        </div>
+        <div>
+          <dt class="col-lg-1" id="lib-address">주소</dt>
+          <dd class="col-lg-10">${libs.lib.address}</dd>
+        </div>
+        <div>
+          <dt class="col-lg-1" id="lib-time">영업시간</dt>
+          <dd class="col-lg-10">${libs.lib.operatingTime}</dd>
+        </div>
+        <div>
+          <dt class="col-lg-1" id="lib-close-day">휴관일</dt>
+          <dd class="col-lg-10">${libs.lib.closed}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>`
+  );
+  console.log("html :", libListHTML);
+  document.getElementById("libs-board").innerHTML = libListHTML;
 }
