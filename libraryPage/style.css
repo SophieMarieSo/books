@@ -11,13 +11,17 @@
 /*도서관 이름 영역*/
 #lib-name {
   position: relative;
-  border-bottom: 1px solid palevioletred;
+  border-bottom: 2px solid skyblue;
   width: 100%;
   padding: 20px;
   margin-bottom: 20px;
   font-size: 35px;
   font-weight: bold;
-  color: palevioletred;
+  color: skyblue;
+}
+
+.fa-book {
+  margin-right: 10px;
 }
 
 /*----도서관 정보가 나오는 영역----*/

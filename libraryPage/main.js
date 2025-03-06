@@ -33,7 +33,9 @@ getLibList();
 function libsRender() {
   const libListHTML = libList.map(
     (libs) => `<div class="row libs">
-    <div class="col-lg-8" id="lib-name">${libs.lib.libName}</div>
+    
+    <div class="col-lg-8" id="lib-name">
+    <i class="fa-solid fa-book"></i>${libs.lib.libName}</div>
     <div class="info">
       <dl>
         <div>
