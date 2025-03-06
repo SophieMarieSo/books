@@ -1,4 +1,5 @@
 .libs {
+  /*도서관 정보가 나오는 영역*/
   margin: 10px;
   padding: 10px;
   padding-bottom: 0px;
@@ -7,6 +8,7 @@
 }
 
 #lib-name {
+  /*도서관 이름 영역*/
   position: relative;
   border-bottom: 1px solid palevioletred;
   width: 100%;
@@ -16,18 +18,33 @@
   color: palevioletred;
 }
 
+/*----도서관 정보가 나오는 영역----*/
+
 .info dl {
-  border: 3px solid green;
-  display: block;
+  /* border: 3px solid green; */
+  display: flex;
+  flex-wrap: wrap; /* 여러 줄이 필요한 경우 줄바꿈 */
   padding: 0px 20px;
 }
 
+.info div {
+  display: flex;
+  width: 100%;
+  align-items: flex-start; /* dt와 dd를 위쪽 정렬 */
+  margin-bottom: 5px;
+}
+
 .info dt {
-  border: solid 1px red;
-  display: inline-block;
+  /* border: 1px solid red; */
+  min-width: 120px; /* dt의 너비 고정 */
+  font-weight: bold;
+  padding: 5px;
 }
 
 .info dd {
   border: 1px solid blue;
-  display: inline-block;
+  flex-grow: 1; /*dd가 남은 공간 차지 */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  padding: 5px;
 }
