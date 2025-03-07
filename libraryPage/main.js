@@ -50,7 +50,7 @@ function libsRender() {
           <dt class="col-lg-1">
         <i class="fa-solid fa-location-dot"></i>
         주소</dt>
-          <dd class="col-lg-10" id="lib-address" onclick="copyAddress()">${libs.lib.address}</dd>
+          <dd class="col-lg-10" id="lib-address" onclick="copyAddress(event)">${libs.lib.address}</dd>
         </div>
         <div>
           <dt class="col-lg-1" id="lib-time">
@@ -72,9 +72,9 @@ function libsRender() {
   document.getElementById("libs-board").innerHTML = libListHTML;
 }
 
-function copyAddress() {
+function copyAddress(event) {
   //주소를 복사하는 함수
-  const copyText = document.getElementById("lib-address").innerText;
+  const copyText = event.target.innerText;
   navigator.clipboard
     .writeText(copyText)
     .then(() => {
