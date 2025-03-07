@@ -3,6 +3,18 @@
 //2. 해당 도서를 보유한 리스트가 페이지에 나온다.
 //3. 리스트에 있는 도서관의 위치를 kakakoMap에 보내준다.
 
+const params = new URLSearchParams(window.location.search); //현재 URL의 쿼리 문자열을 분석하여 객체를 생성
+const isbn = params.get("isbn"); //쿼리 파라미터에서 isbn 값을 가져온다.
+
+if (isbn) {
+  //isbn값이 존재하면
+  let url = new URL( //도서 소장 도서관api
+    `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=11&isbn=${decodeURIComponent(
+      isbn
+    )}&format=json`
+  );
+}
+
 const API_KEY =
   "b14cca520846c95ce8b27fd7604c9de537395aba801650123783e2478da5a64c";
 

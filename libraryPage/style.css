@@ -80,6 +80,11 @@
 }
 
 dd a {
+  /*도서관 전화번호 태그*/
   text-decoration: none;
   color: black;
+}
+
+#lib-address {
+  cursor: pointer;
 }
