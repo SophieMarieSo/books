@@ -1,14 +1,15 @@
-/*도서관 정보가 나오는 영역*/
+/*----도서관 정보가 나오는 영역----*/
 .libs {
   margin: 10px;
   padding: 10px;
   padding-bottom: 0px;
   /* border: 1px solid black; */
   width: 90%;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.15) 3px 3px 5px;
 }
 
-/*도서관 이름 영역*/
+/*----도서관 이름 영역----*/
 #lib-name {
   position: relative;
   border-bottom: 2px solid skyblue;
@@ -22,6 +23,11 @@
 
 .fa-book {
   margin-right: 10px;
+}
+
+#lib-name a {
+  text-decoration: none;
+  color: skyblue;
 }
 
 /*----도서관 정보가 나오는 영역----*/
@@ -44,6 +50,7 @@
   min-width: 120px; /* dt의 너비 고정 */
   font-weight: bold;
   padding: 5px;
+  letter-spacing: 2px;
 }
 
 .info dd {
@@ -54,7 +61,20 @@
   padding: 5px;
 }
 
-.fa-solid {
-  padding: 5px;
-  padding-top: 9px;
+.fa-phone {
+  margin-right: 13px;
+}
+
+.fa-location-dot {
+  margin-left: 2px;
+  margin-right: 12px;
+}
+
+.fa-clock {
+  margin-right: 10px;
+}
+
+.fa-calendar-minus {
+  margin-left: 1px;
+  margin-right: 11px;
 }

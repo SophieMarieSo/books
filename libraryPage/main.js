@@ -15,6 +15,7 @@ let url2 = new URL( //도서 소장 도서관api
 
 let libList = [];
 
+//api에서 데이터를 받아오는 함수
 const getLibList = async () => {
   const response = await fetch(url2);
   const data = await response.json();
@@ -30,32 +31,38 @@ const getLibList = async () => {
 };
 getLibList();
 
+//도서관 목록을 렌더하는 함수
 function libsRender() {
   const libListHTML = libList.map(
     (libs) => `<div class="row libs">
     
     <div class="col-lg-8" id="lib-name">
-    <i class="fa-solid fa-book"></i>${libs.lib.libName}</div>
+    <a href="${libs.lib.homepage}">
+    <i class="fa-solid fa-book"></i>${libs.lib.libName}</a></div>
     <div class="info">
       <dl>
         <div>
-        <i class="fa-solid fa-phone"></i>
-          <dt class="col-lg-1" id="lib-call">전화번호</dt>
+        
+          <dt class="col-lg-1" id="lib-call">
+          <i class="fa-solid fa-phone"></i>전화번호</dt>
           <dd class="col-lg-10">${libs.lib.tel}</dd>
         </div>
         <div>
+          <dt class="col-lg-1" id="lib-address">
         <i class="fa-solid fa-location-dot"></i>
-          <dt class="col-lg-1" id="lib-address">주소</dt>
+        주소</dt>
           <dd class="col-lg-10">${libs.lib.address}</dd>
         </div>
         <div>
+          <dt class="col-lg-1" id="lib-time">
         <i class="fa-solid fa-clock"></i>
-          <dt class="col-lg-1" id="lib-time">영업시간</dt>
+        영업시간</dt>
           <dd class="col-lg-10">${libs.lib.operatingTime}</dd>
         </div>
         <div>
+          <dt class="col-lg-1" id="lib-close-day">
         <i class="fa-solid fa-calendar-minus"></i>
-          <dt class="col-lg-1" id="lib-close-day">휴관일</dt>
+        휴관일</dt>
           <dd class="col-lg-10">${libs.lib.closed}</dd>
         </div>
       </dl>
@@ -65,3 +72,8 @@ function libsRender() {
   console.log("html :", libListHTML);
   document.getElementById("libs-board").innerHTML = libListHTML;
 }
+
+const navigator = navigator.geolocation.getCurrentPosition((position) => {
+  doSomething(position.coords.latitude, position.coords.longitude);
+});
+console.log(navigator);
