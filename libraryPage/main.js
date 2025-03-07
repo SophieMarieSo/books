@@ -42,10 +42,9 @@ function libsRender() {
     <div class="info">
       <dl>
         <div>
-        
           <dt class="col-lg-1" id="lib-call">
           <i class="fa-solid fa-phone"></i>전화번호</dt>
-          <dd class="col-lg-10">${libs.lib.tel}</dd>
+          <dd class="col-lg-10"><a href="tel:${libs.lib.tel}">${libs.lib.tel}</a></dd>
         </div>
         <div>
           <dt class="col-lg-1" id="lib-address">
@@ -72,8 +71,3 @@ function libsRender() {
   console.log("html :", libListHTML);
   document.getElementById("libs-board").innerHTML = libListHTML;
 }
-
-const navigator = navigator.geolocation.getCurrentPosition((position) => {
-  doSomething(position.coords.latitude, position.coords.longitude);
-});
-console.log(navigator);

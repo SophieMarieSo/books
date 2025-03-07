@@ -78,3 +78,8 @@
   margin-left: 1px;
   margin-right: 11px;
 }
+
+dd a {
+  text-decoration: none;
+  color: black;
+}
