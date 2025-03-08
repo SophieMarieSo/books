@@ -30,12 +30,12 @@ let regionCodeTable = {
     "제주특별자치도": "39"
   }
 
-let url1 = new URL( //도서검색api
-  `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&keyword=어린왕자&pageNo=1&pageSize=10&format=json`
-);
-let url2 = new URL( //도서 소장 도서관api
-  `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=${regionCode}&isbn=9788995772423&format=json`
-);
+// let url1 = new URL( //도서검색api
+//   `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&keyword=어린왕자&pageNo=1&pageSize=10&format=json`
+// );
+// let url2 = new URL( //도서 소장 도서관api
+//   `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=${regionCode}&isbn=9788995772423&format=json`
+// );
   
   
 
@@ -81,19 +81,37 @@ if (navigator.geolocation) {
   reverseGeocoding(33.450701, 126.570667);
 }
 
-libList.forEach((libs) => {
-  let distance = getDistance(currentLatitude, currentLongitude, libs.lib.latitude, libs.lib.longitude)
-  libs.lib.distance = distance;
-  console.log(distance);
-})
+// libList.forEach((libs) => {
+//   let distance = getDistance(currentLatitude, currentLongitude, libs.lib.latitude, libs.lib.longitude)
+//   libs.lib.distance = distance;
+//   console.log(distance);
+// })
 //api에서 데이터를 받아오는 함수
 const getLibList = async () => {
+  let url2 = new URL( //도서 소장 도서관api
+    `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=${regionCode}&isbn=9788995772423&format=json`
+  );
   const response = await fetch(url2);
   const data = await response.json();
   console.log("data", data);
 
   libList = data.response.libs;
+  libList.forEach((libs) => {
+    let distance = getDistance(currentLatitude, currentLongitude, libs.lib.latitude, libs.lib.longitude)
+    libs.lib.distance = distance;
+    // console.log(distance);
+  })
+  libList.sort((a,b) => {
+    if (a.lib.distance > b.lib.distance) {
+      return 1;
+    }
+    if (a.lib.distance < b.lib.distance) {
+      return -1;
+    }
+    return 0;
+  })
   console.log("libList", libList);
+  // console.log(sortedLibList);
 
   //   data.response.libs.forEach((item) => {
   //     console.log("libList", item.lib);
@@ -173,7 +191,7 @@ const reverseGeocoding = async (Lat,Lng) => {
   });
   const data = await response.json();
   let region = data.documents[0].address.region_1depth_name;
-  regionCode = regionCodeTable[region];
+  regionCode = +regionCodeTable[region];
   getLibList();
 }
 
