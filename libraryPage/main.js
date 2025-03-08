@@ -1,0 +1,139 @@
+const container = document.getElementById("map");
+
+navigator.geolocation.getCurrentPosition((position) => {
+  let currentLatitude = position.coords.latitude;
+  let currentLongitude = position.coords.longitude;
+  let options = {
+    center: new kakao.maps.LatLng(currentLatitude, currentLongitude),
+    level: 3
+  };
+  let map = new kakao.maps.Map(container, options);
+  libList.forEach((libs) => {
+    let distance = getDistance(currentLatitude, currentLongitude, libs.lib.latitude, libs.lib.longitude)
+    libs.lib.distance = distance;
+    console.log(distance);
+  })
+}, (err) => {
+
+});
+
+
+// 세웅님 코드 영역 //
+
+const API_KEY =
+  "0be2c234076cb8fbd8415ff20f098c4d8056523a3bba5af8ccb7f29cddee5a79";
+
+let url1 = new URL( //도서검색api
+  `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&keyword=어린왕자&pageNo=1&pageSize=10&format=json`
+);
+let url2 = new URL( //도서 소장 도서관api
+  `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=11&isbn=9788995772423&format=json`
+);
+
+let libList = [];
+
+//api에서 데이터를 받아오는 함수
+const getLibList = async () => {
+  const response = await fetch(url2);
+  const data = await response.json();
+  console.log("data", data);
+
+  libList = data.response.libs;
+  console.log("libList", libList);
+
+  //   data.response.libs.forEach((item) => {
+  //     console.log("libList", item.lib);
+  //   });
+
+  libsRender();
+};
+getLibList();
+
+//도서관 목록을 렌더하는 함수
+function libsRender() {
+  const libListHTML = libList.map(
+    (libs) => `<div class="row libs">
+    
+    <div class="col-lg-8" id="lib-name">
+    <a href="${libs.lib.homepage}">
+    <i class="fa-solid fa-book"></i>${libs.lib.libName}</a></div>
+    <div class="info">
+      <dl>
+        <div>
+          <dt class="col-lg-1" id="lib-call">
+          <i class="fa-solid fa-phone"></i>전화번호</dt>
+          <dd class="col-lg-10"><a href="tel:${libs.lib.tel}">${libs.lib.tel}</a></dd>
+        </div>
+        <div>
+          <dt class="col-lg-1">
+        <i class="fa-solid fa-location-dot"></i>
+        주소</dt>
+          <dd class="col-lg-10" id="lib-address" onclick="copyAddress(event)">${libs.lib.address}</dd>
+        </div>
+        <div>
+          <dt class="col-lg-1" id="lib-time">
+        <i class="fa-solid fa-clock"></i>
+        영업시간</dt>
+          <dd class="col-lg-10">${libs.lib.operatingTime}</dd>
+        </div>
+        <div>
+          <dt class="col-lg-1" id="lib-close-day">
+        <i class="fa-solid fa-calendar-minus"></i>
+        휴관일</dt>
+          <dd class="col-lg-10">${libs.lib.closed}</dd>
+        </div>
+      </dl>
+    </div>
+  </div>`
+  );
+  console.log("html :", libListHTML);
+  document.getElementById("libs-board").innerHTML = libListHTML;
+}
+
+function copyAddress(event) {
+  //주소를 복사하는 함수
+  const copyText = event.target.innerText;
+  navigator.clipboard
+    .writeText(copyText)
+    .then(() => {
+      alert("주소가 클립보드에 복사되었습니다.");
+    })
+    .catch((err) => {
+      console.log("클립보드 복사에 실패했습니다.", err);
+    });
+}
+
+// 로직을 짜보자
+// 일단 내 위치 -> navigator.geoLocation을 통해 받아올수있음, 만약 쓸수없다면 디폴트 위도/경도가 필요
+// 그리고  
+
+
+
+
+
+
+
+const getDistance = (lat1, lon1, lat2, lon2) => {
+  // Convert degrees to radians
+  const radLat1 = lat1 * Math.PI / 180;
+  const radLon1 = lon1 * Math.PI / 180;
+  const radLat2 = lat2 * Math.PI / 180;
+  const radLon2 = lon2 * Math.PI / 180;
+
+  // Radius of the Earth in meters
+  const R = 6_371_000; // m
+
+  // Differences in coordinates
+  const dLat = radLat2 - radLat1;
+  const dLon = radLon2 - radLon1;
+
+  // Haversine formula
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(radLat1) * Math.cos(radLat2) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c;
+
+  return distance.toFixed(2); // Return distance rounded to 2 decimal places
+};
