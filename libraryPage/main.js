@@ -1,37 +1,91 @@
-const container = document.getElementById("map");
-
-navigator.geolocation.getCurrentPosition((position) => {
-  let currentLatitude = position.coords.latitude;
-  let currentLongitude = position.coords.longitude;
-  let options = {
-    center: new kakao.maps.LatLng(currentLatitude, currentLongitude),
-    level: 3
-  };
-  let map = new kakao.maps.Map(container, options);
-  libList.forEach((libs) => {
-    let distance = getDistance(currentLatitude, currentLongitude, libs.lib.latitude, libs.lib.longitude)
-    libs.lib.distance = distance;
-    console.log(distance);
-  })
-}, (err) => {
-
-});
-
-
-// 세웅님 코드 영역 //
-
 const API_KEY =
   "0be2c234076cb8fbd8415ff20f098c4d8056523a3bba5af8ccb7f29cddee5a79";
+const REST_API_KEY =
+  "ca710ae75f9527abf30dff43d799e344";
+
+
+let libList = [];
+let currentLatitude = 33.450701;
+let currentLongitude = 126.570667;
+let regionCode = 39;
+let options = {};
+let container = document.getElementById('map'); // 카카오 맵 컨테이너
+let regionCodeTable = {
+    "서울": "11",
+    "부산": "21",
+    "대구": "22",
+    "인천": "23",
+    "광주": "24",
+    "대전": "25",
+    "울산": "26",
+    "세종": "29",
+    "경기": "31",
+    "강원": "32",
+    "충북": "33",
+    "충남": "34",
+    "전북": "35",
+    "전남": "36",
+    "경북": "37",
+    "경남": "38",
+    "제주특별자치도": "39"
+  }
 
 let url1 = new URL( //도서검색api
   `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&keyword=어린왕자&pageNo=1&pageSize=10&format=json`
 );
 let url2 = new URL( //도서 소장 도서관api
-  `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=11&isbn=9788995772423&format=json`
+  `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=${regionCode}&isbn=9788995772423&format=json`
 );
+  
+  
 
-let libList = [];
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      // ✅ 위치 정보를 가져온 경우
+      currentLatitude = position.coords.latitude;
+      currentLongitude = position.coords.longitude;
+      
+      options = {
+        center: new kakao.maps.LatLng(currentLatitude, currentLongitude),
+        level: 3
+      };
+      
+      // ✅ 지도를 생성
+      new kakao.maps.Map(container, options);
+      reverseGeocoding(currentLatitude, currentLongitude);
+    },
+    (error) => {
+      // ❌ 위치 권한 거부 or 오류 발생 시 기본값 사용
+      console.warn("위치 정보를 가져올 수 없음. 기본 좌표로 설정합니다.", error);
 
+      options = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 3
+      };
+
+      // ✅ 기본 좌표로 지도를 생성
+      new kakao.maps.Map(container, options);
+      reverseGeocoding(33.450701, 126.570667);
+    }
+  );
+} else {
+  // ❌ geolocation을 지원하지 않는 경우 기본 좌표 사용
+  options = {
+    center: new kakao.maps.LatLng(33.450701, 126.570667),
+    level: 3
+  };
+
+  // ✅ 기본 좌표로 지도를 생성
+  new kakao.maps.Map(container, options);
+  reverseGeocoding(33.450701, 126.570667);
+}
+
+libList.forEach((libs) => {
+  let distance = getDistance(currentLatitude, currentLongitude, libs.lib.latitude, libs.lib.longitude)
+  libs.lib.distance = distance;
+  console.log(distance);
+})
 //api에서 데이터를 받아오는 함수
 const getLibList = async () => {
   const response = await fetch(url2);
@@ -47,7 +101,8 @@ const getLibList = async () => {
 
   libsRender();
 };
-getLibList();
+
+// getLibList();
 
 //도서관 목록을 렌더하는 함수
 function libsRender() {
@@ -108,10 +163,19 @@ function copyAddress(event) {
 // 그리고  
 
 
-
-
-
-
+const reverseGeocoding = async (Lat,Lng) => {
+  let url3 = new URL(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${Lng}&y=${Lat}`)
+  const response = await fetch(url3, {
+    method: "GET",
+    headers: {
+      "Authorization": `KakaoAK ${REST_API_KEY}`
+    }
+  });
+  const data = await response.json();
+  let region = data.documents[0].address.region_1depth_name;
+  regionCode = regionCodeTable[region];
+  getLibList();
+}
 
 const getDistance = (lat1, lon1, lat2, lon2) => {
   // Convert degrees to radians
