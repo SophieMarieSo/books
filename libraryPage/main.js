@@ -20,7 +20,7 @@ let url1 = new URL( //도서검색api (테스트용)
 );
 
 let url2 = new URL( //도서 소장 도서관api (테스트용)
-  `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=11&isbn=9788995772423&format=json`
+  `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=21&isbn=9788995772423&format=json`
 );
 
 let libList = [];
@@ -49,14 +49,10 @@ const getLibList = async () => {
       libList = data.response.libs; //유효한 libs배열을 변수에 할당
       console.log("libList", libList);
 
-      //   data.response.libs.forEach((item) => {
-      //     console.log("libList", item.lib);
-      //   });
       libsRender(); //도서관 목록을 렌더링.
     } else {
-      //
       console.log("response.status", response.status);
-      throw new Error(data.message);
+      throw new Error(`HTTP 오류 발생: ${response.status} - ${data.message}`);
     }
   } catch (error) {
     if (error.message.includes("Failed to fetch")) {
@@ -109,7 +105,6 @@ function libsRender() {
     </div>
   </div>`
   );
-  console.log("html :", libListHTML);
   document.getElementById("libs-board").innerHTML = libListHTML;
 }
 
