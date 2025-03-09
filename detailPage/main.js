@@ -1,4 +1,4 @@
-const KEY = '0be2c234076cb8fbd8415ff20f098c4d8056523a3bba5af8ccb7f29cddee5a79';
+const KEY = '2f405728e7e81ae3246b8edd5f2fc7c0d85700687facb3d9bbbfe6175c4853f3';
 const params = new URLSearchParams(window.location.search);
 const isbn = params.get('isbn') || params.get('isbn13');
 
@@ -123,7 +123,7 @@ const getBooks = async () => {
 
     //  도서관 페이지로 이동
     libraryBtn.addEventListener('click', () => {
-      window.location.href = `/libraryPage/?isbn13=${isbn}`;
+      window.location.href = `/libraryPage/?isbn=${isbn}`;
     });
 
     // 책 설명 표시

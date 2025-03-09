@@ -66,7 +66,7 @@ const onSubmit = (event) => {
 searchForm.addEventListener('submit', onSubmit);
 
 const API_KEY =
-  '0be2c234076cb8fbd8415ff20f098c4d8056523a3bba5af8ccb7f29cddee5a79';
+  '2f405728e7e81ae3246b8edd5f2fc7c0d85700687facb3d9bbbfe6175c4853f3';
 
 let booksList = [];
 
@@ -144,8 +144,8 @@ const render = () => {
         console.log(isbnnum);
 
         return `
-      <div class="img-box" onclick="window.location.href = /detailPage/?isbn=${isbnnum}">
-        <img src="${imageUrl}" class="img-fluid img-thumbnail alt="${title}">
+      <div class="img-box" onclick="window.location.href = '/detailPage/?isbn=${isbnnum}'">
+        <img src="${imageUrl}" class="img-fluid img-thumbnail">
         <div class="none" >${title}</div>
       </div>
     `;
