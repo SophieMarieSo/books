@@ -144,8 +144,8 @@ const render = () => {
         console.log(isbnnum);
 
         return `
-      <div class="img-box" onclick="window.location.href = /detailPage/?isbn=${isbnnum}">
-        <img src="${imageUrl}" class="img-fluid img-thumbnail alt="${title}">
+      <div class="img-box" onclick="window.location.href = '/detailPage/?isbn=${isbnnum}'">
+        <img src="${imageUrl}" class="img-fluid img-thumbnail">
         <div class="none" >${title}</div>
       </div>
     `;
