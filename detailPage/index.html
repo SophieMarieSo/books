@@ -48,14 +48,14 @@
             우리동네 도서관
           </a>
           <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-          <form class="d-flex" role="search">
+          <form class="d-flex gap-2" role="search">
             <input
               class="form-control me-2"
               type="search"
               placeholder="Search"
               aria-label="Search"
             />
-            <button class="btn btn-sm btn-outline-secondary" type="submit">
+            <button class="btn btn-sm btn-outline-secondary me-2" type="submit">
               <i class="fa-solid fa-microphone" style="color: #ff0000"></i>
             </button>
             <button class="btn btn-sm btn-outline-secondary" type="submit">
@@ -65,6 +65,85 @@
         </div>
       </div>
     </nav>
+
+    <div class="container">
+      <!-- 책이미지, 제목, 저자, 출판사 -->
+      <div class="bookBasicInfo"></div>
+
+      <!--카테고리 리스트 -->
+      <div class="categoryList container text-center">
+        <div class="categoryTabs row align-items-center justify-content-center">
+          <div
+            id="list1"
+            class="col d-flex justify-content-center align-items-center"
+          >
+            도서보유 현황
+          </div>
+          <div
+            id="list2"
+            class="col d-flex justify-content-center align-items-center"
+          >
+            책소개
+          </div>
+          <div
+            id="list3"
+            class="col d-flex justify-content-center align-items-center"
+          >
+            대출 급상승 도서
+          </div>
+        </div>
+      </div>
+
+      <!-- 도서보유 현황 -->
+      <div id="section1" class="content-section">
+        <h2 id="bookStock">도서보유 현황</h2>
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="navigateToKyobo()"
+            id="kyobo"
+          >
+            교보문고
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="navigateToAladin()"
+            id="aladin"
+          >
+            알라딘
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            onclick="navigateToLib()"
+            id="library"
+          >
+            도서관
+          </button>
+        </div>
+      </div>
+
+      <!-- description -->
+      <div id="section2" class="content-section">
+        <div class="row row-cols-1">
+          <h2 id="bookIntroTitle">책소개</h2>
+          <div class="col" id="bookDesc">책소개내용</div>
+        </div>
+      </div>
+
+      <!-- 대출 급상승 도서 -->
+      <div id="section3" class="content-section">
+        <h2 id="hotBookTitle">대출 급상승 도서</h2>
+        <!-- 대출 급상승 도서목록 -->
+        <div class="slider-container">
+          <div class="slider">
+            <div class="d-flex overflow-auto gap-3 p-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="main.js"></script>
     <script
