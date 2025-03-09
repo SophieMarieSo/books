@@ -30,6 +30,8 @@ let regionCodeTable = {
   }
   let positions = [];
   let imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";  
+  let libCodeList = [];
+  let availabilityList = [];
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
@@ -90,7 +92,7 @@ const reverseGeocoding = async (Lat,Lng) => {
 //api에서 데이터를 받아오는 함수
 const getLibList = async () => {
   let url2 = new URL( //도서 소장 도서관api
-    `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=${regionCode}&isbn=9788995772423&format=json`
+    `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=${regionCode}&isbn=9791158392239&format=json`
   );
   const response = await fetch(url2);
   const data = await response.json();
@@ -111,10 +113,27 @@ const getLibList = async () => {
     return 0;
   })
 
+  libCodeList = libList.map((libs) => {return libs.lib.libCode})
   console.log("libList", libList);
-
-  libsRender();
+  console.log(libCodeList);
+  availabilityCheckAll(libCodeList);
 };
+
+const availabilityCheck = async (code) => {
+  const url3 = `http://data4library.kr/api/bookExist?authKey=${API_KEY}&libCode=${code}&isbn13=9791158392239&format=json`
+  const response = await fetch(url3);
+  const data = await response.json();
+  return data.response.result.loanAvailable;
+}
+
+const availabilityCheckAll = async (libcodes) => {
+  const requests = libcodes.map((code) => availabilityCheck(code));
+  const responses = await Promise.all(requests);
+  availabilityList = responses;
+  console.log(availabilityList);
+  libsRender();
+}
+
 
 function libsRender() {
   let libListHTML = ""
@@ -148,6 +167,12 @@ function libsRender() {
           휴관일</dt>
             <dd class="col-lg-10">${libList[i].lib.closed}</dd>
           </div>
+          <div>
+            <dt class="col-lg-1" id="lib-close-day">
+          <i class="fa-solid fa-calendar-minus"></i>
+          현재 대출 가능 여부</dt>
+            <dd class="col-lg-10">${availabilityList[i]=='Y' ? "대출 가능" : "대출 불가"}</dd>
+          </div>
         </dl>
       </div>
       </div>`
@@ -173,6 +198,9 @@ function libsRender() {
   console.log(positions);
   document.getElementById("libs-board").innerHTML = libListHTML;
 }
+
+
+
 
 function copyAddress(event) {
   //주소를 복사하는 함수
