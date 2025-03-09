@@ -13,32 +13,34 @@
 }
 
 .book-image-size{
-    max-width: 100%;
-    max-height: 250px;
+    width: 100%;
+    height: 200px;
     margin-right: 1em;
     text-align: center;
 }
-
+    
 .books{
     display: flex;
     padding: 1em;
-    border-bottom:2px solid black;
+    
 }
 
 .book-detail{
     display:flex;
-    justify-content: space-between;
+    justify-content: center;
+    padding: 10px;
 }
 
 .result-text{
     margin-top:1em;
+    margin-left: 1em;
     display:flex;
     justify-content:left;
     gap:10px;
 }
 
 
-  .page-item.active .page-link{
+.page-item.active .page-link{
     background-color: burlywood;
     color: white;
     border-color: burlywood;
@@ -70,3 +72,72 @@
     animation: spin 1s linear infinite;
     display: none;
 }
+
+.libs {
+    margin: 10px;
+    padding: 10px;
+    padding-bottom: 0px;
+    /* border: 1px solid black; */
+    width: 90%;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.15) 3px 3px 5px;
+  }
+  
+  .info dl {
+    /* border: 3px solid green; */
+    display: flex;
+    flex-wrap: wrap; /* 여러 줄이 필요한 경우 줄바꿈 */
+    padding: 0px 20px;
+  }
+
+  .info div {
+    display: flex;
+    width: 100%;
+    align-items: flex-start; /* dt와 dd를 위쪽 정렬 */
+    margin-bottom: 5px;
+  }
+  
+  .info dt {
+    /* border: 1px solid red; */
+    min-width: 120px; /* dt의 너비 고정 */
+    font-weight: bold;
+    padding: 5px;
+    letter-spacing: 2px;
+  }
+  
+  .info dd {
+    /* border: 1px solid blue; */
+    flex-grow: 1; /*dd가 남은 공간 차지 */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    padding: 5px;
+  }
+
+  #lib-name {
+  position: relative;
+  width: 100%;
+  padding: 3px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#lib-name {
+    color: skyblue;
+    border-bottom: 2px solid skyblue;
+  }
+
+.button-size{
+    display: flex;  /* flexbox 유지 */
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: center; /* 가로 정렬 */
+  width: 150px;  /* 고정된 가로 크기 */
+  height: 25px;  /* 고정된 세로 크기 */
+  flex: 0 0 auto; /* flex 크기 자동 조정 방지 */
+  white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+  line-height: 30px; /* 높이와 동일하게 설정하여 글자 중앙 정렬 */
+}
+
+.pagination:hover{
+    cursor:pointer;
+  }

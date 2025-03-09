@@ -3,11 +3,11 @@ let booksList = [];
 let numFound = 0;
 let pageSize = 10;
 let pageNo = 1;
-const groupSize=5;
+const groupSize = 5;
 const goHome = document.getElementById("go-home");
 
 const params = new URLSearchParams(window.location.search);
-const keyWord = params.get("keyword") // 기본값 설정
+const keyWord = params.get("keyword") || "수학"; // 기본값 설정
 
 if (keyWord) {
   document.getElementById(
@@ -18,21 +18,20 @@ if (keyWord) {
 }
 
 const getSearchResult = async () => {
-  
   const url = new URL(
-    `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&keyword=${keyWord}&format=json`
+    `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&title=${keyWord}&exactMatch=true&format=json`
   );
   console.log("uuu", url);
-  url.searchParams.set("pageSize",pageSize);
-  url.searchParams.set("pageNo",pageNo);
-  
+  url.searchParams.set("pageSize", pageSize);
+  url.searchParams.set("pageNo", pageNo);
+
   const response = await fetch(url);
-  
+
   const data = await response.json();
 
   booksList = data.response?.docs?.map((item) => item.doc) || [];
   numFound = data.response?.numFound;
-  console.log("totalBooks",numFound)
+  console.log("totalBooks", numFound);
   console.log("rrr", response);
   console.log("ddd", data);
 
@@ -40,9 +39,9 @@ const getSearchResult = async () => {
   console.log("booksList의 타입:", typeof booksList);
   console.log("booksList 배열 여부:", Array.isArray(booksList));
   console.log("booksList의 키들:", Object.keys(booksList));
-  
+
   render();
-  
+
   paginationRender();
 };
 
@@ -60,23 +59,54 @@ const render = () => {
 
   const booksHTML = booksList
     .map((books) => {
-      return `<div class="row books">
-          <div class="col-lg-4">
-            <img class="book-image-size"
-              src=${books.bookImageURL}"
+      return `<div class="row books libs">
+          <div class="col-lg-2">
+          <div class="image-section">
+            <img class="img-thumbnail rounded img-fluid book-image-size"
+              src=${
+                books.bookImageURL
+                  ? books.bookImageURL
+                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU"
+              }"
               onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU';"
             />
-          </div>
-          <div class="col-lg-8">
-            <h2>${books.bookname || "제목 없음"}</h2>
-            <p>${books.authors || "저자 미상"}</p>
-            <p>출판사: ${books.publisher || "출판사 미상"}</p>
-            <p>출판연도: ${books.publication_year || "출판 연도 없음"}</p>
-            <p>ISBN-13: ${books.isbn13 || "정보 없음"}</p>
-            <p>대출 횟수: ${books.loan_count || "정보 없음"}</p> 
-            <button class="book-detail" data-isbn="${
+            </div>
+            <div class="book-detail">
+            <button type="button" class="btn btn-outline-info btn-size" data-isbn="${
               books.isbn13
             }">자세히 보기</button>
+            </div>
+          </div>
+          <div class="col-lg-10 info"">
+          <dl class = "to-button-distance">
+          <div id = "lib-name">
+          <dt class="col-lg-1">
+          <i class="fa-solid fa-book"></i>
+          </dt>
+            <dd class="col-lg-10">${books.bookname || "제목 없음"}</dd>
+          </div>
+          <div>
+          <dt class="col-lg-1">
+          <i class="fa-solid fa-feather"> 저자 </i>
+          </dt>
+            <dd class="col-lg-10">${books.authors || "저자 미상"}</dd>
+          </div>
+          <div>
+          <dt class="col-lg-1">
+          <i class="fa-solid fa-upload">  출판사 </i>
+          </dt>
+            <dd class="col-lg-10"> ${books.publisher || "출판사 미상"}</dd>
+          </div>
+          <div>
+          <dt class="col-lg-1">
+          <i class="fa-solid fa-calendar-days"> 출판연도</i>
+          </dt>
+            <dd class="col-lg-10">${
+              books.publication_year || "출판 연도 없음"
+            }</dd>
+          </div>
+            </dl>
+            
           </div>
         </div>`;
     })
@@ -98,12 +128,12 @@ const render = () => {
   });
 };
 
-goHome.addEventListener('click', () => {
+goHome.addEventListener("click", () => {
   window.location.href = `/`;
 });
 
-const paginationRender= () => {
-  let paginationHTML='';
+const paginationRender = () => {
+  let paginationHTML = "";
   const totalPages = Math.ceil(numFound / pageSize);
   let pageGroup = Math.ceil(pageNo / groupSize);
   let lastPage = pageGroup * groupSize;
@@ -116,58 +146,32 @@ const paginationRender= () => {
     // 마지막 그룹이 5개 이하이면
     last = totalPages;
   }
-  let firstPage = lastPage - 4<=0?1:lastPage-4;
+  let firstPage = lastPage - 4 <= 0 ? 1 : lastPage - 4;
   if (pageNo > 1) {
     paginationHTML = `<li class="page-item" onclick="moveToPage(1)"><a class="page-link" href="#"> &lt;&lt; </a></li>
         <li class="page-item" onclick="moveToPage(${
           pageNo - 1
         })"><a class="page-link" href="#">&lt;</a></li>`;
   }
- for(let i=firstPage ; i<=lastPage ; i++){
-  paginationHTML+=`<li class="page-item ${i == pageNo?"active":""}" onclick="moveToPage(${i})"><a class="page-link">${i}</a></li>`
-  console.log("페이지네이션",paginationHTML)
- }
- if (pageNo < totalPages) {
-  paginationHTML += `<li class="page-item" onclick="moveToPage(${
-    pageNo + 1
-  })"><a class="page-link" href="#"> &gt; </a></li>
+  for (let i = firstPage; i <= lastPage; i++) {
+    paginationHTML += `<li class="page-item ${
+      i === pageNo ? "active" : ""
+    }" onclick="moveToPage(${i})"><a class="page-link">${i}</a></li>`;
+  }
+  if (pageNo < totalPages) {
+    paginationHTML += `<li class="page-item" onclick="moveToPage(${
+      pageNo + 1
+    })"><a class="page-link" href="#"> &gt; </a></li>
       <li class="page-item" onclick="moveToPage(${totalPages})"><a class="page-link" href="#"> &gt;&gt; </a></li>`;
-}
- 
+  }
+
   document.querySelector(".pagination").innerHTML = paginationHTML;
 };
 
-const moveToPage=(pageNum)=>{
-  console.log("movetopage",pageNum)
-  pageNo=pageNum;
+const moveToPage = (pageNum) => {
+  console.log("movetopage", pageNum);
+  pageNo = pageNum;
   getSearchResult();
-}
+};
 
-// {/* <nav aria-label="Page navigation example">
-//   <ul class="pagination">
-//     <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-//     <li class="page-item"><a class="page-link" href="#">1</a></li>
-//     <li class="page-item"><a class="page-link" href="#">2</a></li>
-//     <li class="page-item"><a class="page-link" href="#">3</a></li>
-//     <li class="page-item"><a class="page-link" href="#">Next</a></li>
-//   </ul>
-// </nav> */}
-
- 
-
-
-// const pageClick = (pageNum) => {
-//   page = pageNum;
-//   window.scrollTo({ top: 0, behavior: "smooth" });
-//   getSearchResult();
-// };
-function showLoadingSpinner() {
-  const loadingSpinner = document.getElementById('loadingSpinner');
-  loadingSpinner.style.display = 'block';
-}
-
-function hideLoadingSpinner() {
-  const loadingSpinner = document.getElementById('loadingSpinner');
-  loadingSpinner.style.display = 'none';
-}
 getSearchResult();
