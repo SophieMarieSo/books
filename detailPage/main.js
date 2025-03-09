@@ -1,4 +1,4 @@
-const KEY = '60c1112f70bc2b02e9583cf8115e9f1260362b37bf5bd0649c11f595e81ac283';
+const KEY = '0be2c234076cb8fbd8415ff20f098c4d8056523a3bba5af8ccb7f29cddee5a79';
 const params = new URLSearchParams(window.location.search);
 const isbn = params.get('isbn') || params.get('isbn13');
 
