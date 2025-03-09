@@ -1,7 +1,13 @@
 const KEY = "088618df2a94a32a0ad53ce982c2761f49bba21f2e1a05892f77303dc525b084";
-let ISBN = "9788936434267";
+const params = new URLSearchParams(window.location.search);
+const isbn = params.get("isbn") || params.get("isbn13");
+
+if (!isbn) {
+  alert("ISBN 값이 올바르지 않습니다.");
+}
+
 const urlSrchDtlList = new URL(
-  `http://data4library.kr/api/srchDtlList?authKey=${KEY}&format=json&loaninfoYN=Y`
+  `http://data4library.kr/api/srchDtlList?authKey=${KEY}&isbn13=${isbn}&format=json&loaninfoYN=Y`
 );
 const urlHotTrend = new URL(
   `http://data4library.kr/api/hotTrend?format=json&authKey=${KEY}`
@@ -13,30 +19,6 @@ const tabs = document.querySelectorAll(".categoryTabs");
 const underline = document.getElementById("under-line");
 const list1 = document.getElementById("list1");
 const category = document.getElementById(".categoryList");
-const kyoboBtn = document.getElementById("kyobo");
-const aladinBtn = document.getElementById("aladin");
-const libraryBtn = document.getElementById("library");
-
-//  도서관 버튼 클릭시, isbn 넘기는 코드
-libraryBtn.addEventListener("click", () => {
-  const params = new URLSearchParams(window.location.search);
-  const ISBNtoLib = params.get("isbn");
-  if (ISBNtoLib) {
-    window.location.href = `/libraryPage/?isbn=${ISBNtoLib}`;
-  } else {
-    alert("ISBN 정보를 찾을 수 없습니다.");
-  }
-});
-
-// 교보문고로 이동
-kyoboBtn.addEventListener("click", () => {
-  window.open("https://www.kyobobook.co.kr", "_blank");
-});
-
-// 알라딘으로 이동
-aladinBtn.addEventListener("click", () => {
-  window.open("https://www.aladin.co.kr", "_blank");
-});
 
 // 카테고리 클릭 시 해당 카테고리 위치로 이동
 document.addEventListener("DOMContentLoaded", function () {
@@ -61,9 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
 // 책 정보 가져오기
 const getBooks = async () => {
   try {
-    // ISBN 파라미터 설정
-    urlSrchDtlList.searchParams.set("isbn13", ISBN);
-
     // API 호출
     const response = await fetch(urlSrchDtlList);
     const data = await response.json();
@@ -75,24 +54,78 @@ const getBooks = async () => {
     // 책 기본 정보 표시
     bookBasicInfo.innerHTML = `
   <div class="row">
-    <div class="col-sm-4">
-      <div><img id="bookImg" src="${
+    <div class="col-lg-3 col-sm-12">
+      <div><img class="img-fluid" id="bookImg" src="${
         bookData.bookImageURL && bookData.bookImageURL !== null
           ? bookData.bookImageURL
           : "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg"
       }" 
-  onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg';" alt="Book Image" /></div>
+      onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg';" 
+      alt="Book Image" /></div>
     </div>
-    <div class="col-sm-8">
+    
+    <div class="col-lg-9 co-sm-12">
       <div class="bookBasicInfo-detail">
         <div id="bookclass">${bookData.class_nm}</div>
         <div><h1 id="bookName">${bookData.bookname}</h1></div>
         <div id="bookAuthor">${bookData.authors} 저</div>
-        <div id="bookPublisher">${bookData.publisher} 출판</div>        
+        <div id="bookPublisher">${bookData.publisher} 출판</div>
+        <div id="section1" class="content-section">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="kyobo"
+          >
+            교보문고
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="aladin"
+          >
+            알라딘
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            id="library"
+          >
+            도서관
+          </button>
+        </div>
+      </div>
       </div>
     </div>
   </div>
 `;
+    const kyoboBtn = document.getElementById("kyobo");
+    const aladinBtn = document.getElementById("aladin");
+    const libraryBtn = document.getElementById("library");
+
+    // 교보문고로 이동
+    kyoboBtn.addEventListener("click", () => {
+      window.open(
+        encodeURI(
+          `https://search.kyobobook.co.kr/search?keyword=${bookData.bookname}&gbCode=TOT&target=total`
+        ),
+        "_blank"
+      );
+    });
+
+    // 알라딘으로 이동
+    aladinBtn.addEventListener("click", () => {
+      window.open(
+        `https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=All&SearchWord=${bookData.bookname}`,
+        "_blank"
+      );
+    });
+
+    //  도서관 페이지로 이동
+    libraryBtn.addEventListener("click", () => {
+      window.location.href = `/libraryPage/?isbn13=${isbn}`;
+    });
+
     // 책 설명 표시
     bookDescription.innerHTML =
       bookData.description && bookData.description.trim() !== ""
@@ -143,14 +176,9 @@ const getHotBook = async () => {
         (item) => ` 
 <div class="book">
   <img src="${item.doc.bookImageURL}" class="img-fluid" alt="${item.doc.bookname}" 
-    style="cursor: pointer;" onclick="getAnotherHotBook('${item.doc.isbn13}')"
+    style="height: 250px ;cursor: pointer;" onclick="getAnotherHotBook('${item.doc.isbn13}')"
  />
-  
-  <p class="text-center mt-2" style="font-weight: bold; cursor: pointer;" 
-    onclick="getAnotherHotBook('${item.doc.isbn13}')"
->
-    ${item.doc.bookname}
-  </p>
+
 </div>
 `
       )
@@ -160,13 +188,13 @@ const getHotBook = async () => {
   }
 };
 
-const getAnotherHotBook = (ISBN) => {
-  console.log("Clicked ISBN:", ISBN);
-  if (!ISBN) {
+const getAnotherHotBook = (isbn) => {
+  console.log("Clicked ISBN:", isbn);
+  if (!isbn) {
     alert("ISBN 값이 올바르지 않습니다.");
     return;
   }
-  window.location.href(`/detailPage/?isbn=${ISBN}`, "_blank");
+  window.open(`/detailPage/?isbn=${isbn}`, "_blank");
 };
 
 // 슬라이드 이동
