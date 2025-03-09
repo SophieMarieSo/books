@@ -152,7 +152,7 @@ const getHotBook = async () => {
     };
 
     // 날짜 파라미터 설정
-    urlHotTrend.searchParams.set('searchDt', `2024-01-01`); //날짜  getFormattedDate()으로 수정하기
+    urlHotTrend.searchParams.set('searchDt', getFormattedDate()); //날짜  getFormattedDate()으로 수정하기
 
     // API 호출
     const response = await fetch(urlHotTrend);
