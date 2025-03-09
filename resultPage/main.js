@@ -19,7 +19,7 @@ if (keyWord) {
 
 const getSearchResult = async () => {
   const url = new URL(
-    `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&keyword=${keyWord}&format=json`
+    `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&title=${keyWord}&exactMatch=true&format=json`
   );
   console.log('uuu', url);
   url.searchParams.set('pageSize', pageSize);
@@ -59,10 +59,15 @@ const render = () => {
 
   const booksHTML = booksList
     .map((books) => {
-      return `<div class="row books">
-          <div class="col-lg-4">
-            <img class="book-image-size"
-              src=${books.bookImageURL}"
+      return `<div class="row books libs">
+          <div class="col-lg-2">
+          <div class="image-section">
+            <img class="img-thumbnail rounded img-fluid book-image-size"
+              src=${
+                books.bookImageURL
+                  ? books.bookImageURL
+                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU'
+              }"
               onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU';"
             />
           </div>
@@ -76,6 +81,38 @@ const render = () => {
             <button class="book-detail" data-isbn="${
               books.isbn13
             }">자세히 보기</button>
+            </div>
+          </div>
+          <div class="col-lg-10 info"">
+          <dl class = "to-button-distance">
+          <div id = "lib-name">
+          <dt class="col-lg-1">
+          <i class="fa-solid fa-book"></i>
+          </dt>
+            <dd class="col-lg-10">${books.bookname || '제목 없음'}</dd>
+          </div>
+          <div>
+          <dt class="col-lg-1">
+          <i class="fa-solid fa-feather"> 저자 </i>
+          </dt>
+            <dd class="col-lg-10">${books.authors || '저자 미상'}</dd>
+          </div>
+          <div>
+          <dt class="col-lg-1">
+          <i class="fa-solid fa-upload">  출판사 </i>
+          </dt>
+            <dd class="col-lg-10"> ${books.publisher || '출판사 미상'}</dd>
+          </div>
+          <div>
+          <dt class="col-lg-1">
+          <i class="fa-solid fa-calendar-days"> 출판연도</i>
+          </dt>
+            <dd class="col-lg-10">${
+              books.publication_year || '출판 연도 없음'
+            }</dd>
+          </div>
+            </dl>
+            
           </div>
         </div>`;
     })
@@ -164,8 +201,4 @@ function showLoadingSpinner() {
   loadingSpinner.style.display = 'block';
 }
 
-function hideLoadingSpinner() {
-  const loadingSpinner = document.getElementById('loadingSpinner');
-  loadingSpinner.style.display = 'none';
-}
 getSearchResult();
