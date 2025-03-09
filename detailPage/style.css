@@ -67,23 +67,6 @@ nav {
   height: auto;
   border-radius: 8px;
 }
-button {
-  position: absolute;
-  top: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 24px;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 10;
-  transform: translateY(-50%);
-  border-radius: 50%;
-}
-
-button:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
 
 .prev {
   left: 10px;
