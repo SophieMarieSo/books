@@ -1,7 +1,4 @@
 /*----도서관 정보가 나오는 전체 카드----*/
-#libs-board {
-}
-
 .libs {
   /* border: 1px solid black; */
   margin: 10px;
@@ -108,5 +105,13 @@ dd a {
 @media screen and (max-width: 768px) {
   #lib-name {
     font-size: 30px;
+  }
+
+  .container {
+    background-position: center;
+  }
+
+  #map {
+    max-width: 100%;
   }
 }
