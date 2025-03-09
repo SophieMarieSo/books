@@ -3,7 +3,6 @@ const API_KEY =
 const REST_API_KEY =
   "ca710ae75f9527abf30dff43d799e344";
 
-
 let libList = [];
 let currentLatitude = 33.450701;
 let currentLongitude = 126.570667;
@@ -29,15 +28,8 @@ let regionCodeTable = {
     "경남": "38",
     "제주특별자치도": "39"
   }
-
-// let url1 = new URL( //도서검색api
-//   `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&keyword=어린왕자&pageNo=1&pageSize=10&format=json`
-// );
-// let url2 = new URL( //도서 소장 도서관api
-//   `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=${regionCode}&isbn=9788995772423&format=json`
-// );
-  
-  
+  let positions = [];
+  let imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";  
 
 if (navigator.geolocation) {
   navigator.geolocation.getCurrentPosition(
@@ -48,11 +40,11 @@ if (navigator.geolocation) {
       
       options = {
         center: new kakao.maps.LatLng(currentLatitude, currentLongitude),
-        level: 3
+        level: 10
       };
       
       // ✅ 지도를 생성
-      new kakao.maps.Map(container, options);
+      map = new kakao.maps.Map(container, options);
       reverseGeocoding(currentLatitude, currentLongitude);
     },
     (error) => {
@@ -61,11 +53,11 @@ if (navigator.geolocation) {
 
       options = {
         center: new kakao.maps.LatLng(33.450701, 126.570667),
-        level: 3
+        level: 10
       };
 
       // ✅ 기본 좌표로 지도를 생성
-      new kakao.maps.Map(container, options);
+      map = new kakao.maps.Map(container, options);
       reverseGeocoding(33.450701, 126.570667);
     }
   );
@@ -73,19 +65,28 @@ if (navigator.geolocation) {
   // ❌ geolocation을 지원하지 않는 경우 기본 좌표 사용
   options = {
     center: new kakao.maps.LatLng(33.450701, 126.570667),
-    level: 3
+    level: 10
   };
 
   // ✅ 기본 좌표로 지도를 생성
-  new kakao.maps.Map(container, options);
+  map = new kakao.maps.Map(container, options);
   reverseGeocoding(33.450701, 126.570667);
 }
 
-// libList.forEach((libs) => {
-//   let distance = getDistance(currentLatitude, currentLongitude, libs.lib.latitude, libs.lib.longitude)
-//   libs.lib.distance = distance;
-//   console.log(distance);
-// })
+const reverseGeocoding = async (Lat,Lng) => {
+  let url1 = new URL(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${Lng}&y=${Lat}`)
+  const response = await fetch(url1, {
+    method: "GET",
+    headers: {
+      "Authorization": `KakaoAK ${REST_API_KEY}`
+    }
+  });
+  const data = await response.json();
+  let region = data.documents[0].address.region_1depth_name;
+  regionCode = +regionCodeTable[region];
+  getLibList();
+}
+
 //api에서 데이터를 받아오는 함수
 const getLibList = async () => {
   let url2 = new URL( //도서 소장 도서관api
@@ -99,7 +100,6 @@ const getLibList = async () => {
   libList.forEach((libs) => {
     let distance = getDistance(currentLatitude, currentLongitude, libs.lib.latitude, libs.lib.longitude)
     libs.lib.distance = distance;
-    // console.log(distance);
   })
   libList.sort((a,b) => {
     if (a.lib.distance > b.lib.distance) {
@@ -110,56 +110,67 @@ const getLibList = async () => {
     }
     return 0;
   })
-  console.log("libList", libList);
-  // console.log(sortedLibList);
 
-  //   data.response.libs.forEach((item) => {
-  //     console.log("libList", item.lib);
-  //   });
+  console.log("libList", libList);
 
   libsRender();
 };
 
-// getLibList();
-
-//도서관 목록을 렌더하는 함수
 function libsRender() {
-  const libListHTML = libList.map(
-    (libs) => `<div class="row libs">
-    
-    <div class="col-lg-8" id="lib-name">
-    <a href="${libs.lib.homepage}">
-    <i class="fa-solid fa-book"></i>${libs.lib.libName}</a></div>
-    <div class="info">
-      <dl>
-        <div>
-          <dt class="col-lg-1" id="lib-call">
-          <i class="fa-solid fa-phone"></i>전화번호</dt>
-          <dd class="col-lg-10"><a href="tel:${libs.lib.tel}">${libs.lib.tel}</a></dd>
-        </div>
-        <div>
-          <dt class="col-lg-1">
-        <i class="fa-solid fa-location-dot"></i>
-        주소</dt>
-          <dd class="col-lg-10" id="lib-address" onclick="copyAddress(event)">${libs.lib.address}</dd>
-        </div>
-        <div>
-          <dt class="col-lg-1" id="lib-time">
-        <i class="fa-solid fa-clock"></i>
-        영업시간</dt>
-          <dd class="col-lg-10">${libs.lib.operatingTime}</dd>
-        </div>
-        <div>
-          <dt class="col-lg-1" id="lib-close-day">
-        <i class="fa-solid fa-calendar-minus"></i>
-        휴관일</dt>
-          <dd class="col-lg-10">${libs.lib.closed}</dd>
-        </div>
-      </dl>
-    </div>
-  </div>`
-  );
+  let libListHTML = ""
+  for (let i=0;i<5;i++) {
+    libListHTML += `<div class="row libs">
+      <div class="col-lg-8" id="lib-name">
+      <a href="${libList[i].lib.homepage}">
+      <i class="fa-solid fa-book"></i>${libList[i].lib.libName}</a></div>
+      <div class="info">
+        <dl>
+          <div>
+            <dt class="col-lg-1" id="lib-call">
+            <i class="fa-solid fa-phone"></i>전화번호</dt>
+            <dd class="col-lg-10"><a href="tel:${libList[i].lib.tel}">${libList[i].lib.tel}</a></dd>
+          </div>
+          <div>
+            <dt class="col-lg-1">
+          <i class="fa-solid fa-location-dot"></i>
+          주소</dt>
+            <dd class="col-lg-10" id="lib-address" onclick="copyAddress(event)">${libList[i].lib.address}</dd>
+          </div>
+          <div>
+            <dt class="col-lg-1" id="lib-time">
+          <i class="fa-solid fa-clock"></i>
+          영업시간</dt>
+            <dd class="col-lg-10">${libList[i].lib.operatingTime}</dd>
+          </div>
+          <div>
+            <dt class="col-lg-1" id="lib-close-day">
+          <i class="fa-solid fa-calendar-minus"></i>
+          휴관일</dt>
+            <dd class="col-lg-10">${libList[i].lib.closed}</dd>
+          </div>
+        </dl>
+      </div>
+      </div>`
+    positions.push({
+      title: `${libList[i].lib.libName}`,
+      latlng: new kakao.maps.LatLng(libList[i].lib.latitude, libList[i].lib.longitude)
+    })
+  };
+  for (let i = 0; i < positions.length; i ++) {
+    // 마커 이미지의 이미지 크기 입니다
+    let imageSize = new kakao.maps.Size(24, 35); 
+    // 마커 이미지를 생성합니다    
+    let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize); 
+    // 마커를 생성합니다
+    let marker = new kakao.maps.Marker({
+        map: map, // 마커를 표시할 지도
+        position: positions[i].latlng, // 마커를 표시할 위치
+        title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        image : markerImage // 마커 이미지 
+    });
+  }
   console.log("html :", libListHTML);
+  console.log(positions);
   document.getElementById("libs-board").innerHTML = libListHTML;
 }
 
@@ -174,25 +185,6 @@ function copyAddress(event) {
     .catch((err) => {
       console.log("클립보드 복사에 실패했습니다.", err);
     });
-}
-
-// 로직을 짜보자
-// 일단 내 위치 -> navigator.geoLocation을 통해 받아올수있음, 만약 쓸수없다면 디폴트 위도/경도가 필요
-// 그리고  
-
-
-const reverseGeocoding = async (Lat,Lng) => {
-  let url3 = new URL(`https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${Lng}&y=${Lat}`)
-  const response = await fetch(url3, {
-    method: "GET",
-    headers: {
-      "Authorization": `KakaoAK ${REST_API_KEY}`
-    }
-  });
-  const data = await response.json();
-  let region = data.documents[0].address.region_1depth_name;
-  regionCode = +regionCodeTable[region];
-  getLibList();
 }
 
 const getDistance = (lat1, lon1, lat2, lon2) => {
