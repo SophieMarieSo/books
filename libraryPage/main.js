@@ -215,8 +215,11 @@ function libsRender() {
         <div>
             <dt class="col-lg-1" id="lib-loan">
             <i class="fa-solid fa-book-bookmark"></i>
-          대출여부</dt>
+          대출현황</dt>
           <dd class="col-lg-10">
+          ${
+            availabilityList[i] == "Y" ? "대출 가능" : "대출 불가"
+          }
           ${`
             <i class="fa-solid ${
               availabilityList[i] == "Y" ? "fa-circle-dot" : "fa-x"
