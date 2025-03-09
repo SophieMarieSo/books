@@ -206,20 +206,25 @@ function libsRender() {
         휴관일</dt>
           <dd class="col-lg-10">${libList[i].lib.closed || "정보 없음"}</dd>
         </div>
+        <div>
+            <dt class="col-lg-1" id="lib-loan">
+            <i class="fa-solid fa-book-bookmark"></i>
+          대출여부</dt>
+          <dd class="col-lg-10">
+          ${`
+            <i class="fa-solid ${
+              availabilityList[i] == "Y" ? "fa-circle-dot" : "fa-x"
+            }" style="color: ${
+            availabilityList[i] == "Y" ? "#5feca3" : "#c22424"
+          };"></i>
+          `}
+        </dd>
+        
+          </div>
       </dl>
     </div>
-  </div>
-          <div>
-            <dt class="col-lg-1" id="lib-close-day">
-          <i class="fa-solid fa-calendar-minus"></i>
-          현재 대출 가능 여부</dt>
-            <dd class="col-lg-10">${
-              availabilityList[i] == "Y" ? "대출 가능" : "대출 불가"
-            }</dd>
-          </div>
-        </dl>
-      </div>
-      </div>`;
+  </div>`;
+
     positions.push({
       title: `${libList[i].lib.libName}`,
       latlng: new kakao.maps.LatLng(
