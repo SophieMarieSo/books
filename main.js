@@ -66,7 +66,7 @@ const onSubmit = (event) => {
 searchForm.addEventListener('submit', onSubmit);
 
 const API_KEY =
-  '0be2c234076cb8fbd8415ff20f098c4d8056523a3bba5af8ccb7f29cddee5a79';
+  '2f405728e7e81ae3246b8edd5f2fc7c0d85700687facb3d9bbbfe6175c4853f3';
 
 let booksList = [];
 
