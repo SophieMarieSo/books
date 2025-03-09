@@ -1,84 +1,187 @@
-//현재 위치를 기반으로 가까운 도서관 목록 3~5곳을 띄운는 기능을 추가해야 함.
-
 const API_KEY =
   "b14cca520846c95ce8b27fd7604c9de537395aba801650123783e2478da5a64c";
-
-const params = new URLSearchParams(window.location.search); //현재 URL의 쿼리 문자열을 분석하여 객체를 생성
-const isbn = params.get("isbn"); //쿼리 파라미터에서 isbn 값을 가져온다.
-
-if (isbn) {
-  //isbn값이 존재하면
-  let url = new URL( //도서 소장 도서관api (실제 사용할 코드)
-    `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=11&isbn=${decodeURIComponent(
-      isbn
-    )}&format=json`
-  );
-}
-
-let url1 = new URL( //도서검색api (테스트용)
-  `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&keyword=어린왕자&pageNo=1&pageSize=10&format=json`
-);
-
-let url2 = new URL( //도서 소장 도서관api (테스트용)
-  `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=21&isbn=9788995772423&format=json`
-);
+const REST_API_KEY = "0552009c4276d8a33d3336dfc9217b81";
 
 let libList = [];
+let currentLatitude = 33.450701;
+let currentLongitude = 126.570667;
+let regionCode = 39;
+let options = {};
+let container = document.getElementById("map"); // 카카오 맵 컨테이너
+let regionCodeTable = {
+  서울: "11",
+  부산: "21",
+  대구: "22",
+  인천: "23",
+  광주: "24",
+  대전: "25",
+  울산: "26",
+  세종: "29",
+  경기: "31",
+  강원: "32",
+  충북: "33",
+  충남: "34",
+  전북: "35",
+  전남: "36",
+  경북: "37",
+  경남: "38",
+  제주특별자치도: "39",
+};
+let positions = [];
+let imageSrc =
+  "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+let libCodeList = [];
+let availabilityList = [];
+let map;
+
+if (navigator.geolocation) {
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      // ✅ 위치 정보를 가져온 경우
+      currentLatitude = position.coords.latitude;
+      currentLongitude = position.coords.longitude;
+
+      options = {
+        center: new kakao.maps.LatLng(currentLatitude, currentLongitude),
+        level: 10,
+      };
+
+      // ✅ 지도를 생성
+      map = new kakao.maps.Map(container, options);
+      reverseGeocoding(currentLatitude, currentLongitude);
+    },
+    (error) => {
+      // ❌ 위치 권한 거부 or 오류 발생 시 기본값 사용
+      console.warn(
+        "위치 정보를 가져올 수 없음. 기본 좌표로 설정합니다.",
+        error
+      );
+
+      options = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 10,
+      };
+
+      // ✅ 기본 좌표로 지도를 생성
+      map = new kakao.maps.Map(container, options);
+      reverseGeocoding(33.450701, 126.570667);
+    }
+  );
+} else {
+  // ❌ geolocation을 지원하지 않는 경우 기본 좌표 사용
+  options = {
+    center: new kakao.maps.LatLng(33.450701, 126.570667),
+    level: 10,
+  };
+
+  // ✅ 기본 좌표로 지도를 생성
+  map = new kakao.maps.Map(container, options);
+  reverseGeocoding(33.450701, 126.570667);
+}
+
+const reverseGeocoding = async (Lat, Lng) => {
+  let url1 = new URL(
+    `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${Lng}&y=${Lat}`
+  );
+  const response = await fetch(url1, {
+    method: "GET",
+    headers: {
+      Authorization: `KakaoAK ${REST_API_KEY}`,
+    },
+  });
+  const data = await response.json();
+  let region = data.documents[0].address.region_1depth_name;
+  regionCode = +regionCodeTable[region];
+  getLibList();
+};
 
 //api에서 도서관 목록을 받아오는 함수
+// API에서 도서관 목록을 받아오는 함수
 const getLibList = async () => {
   try {
+    let url2 = new URL(
+      `http://data4library.kr/api/libSrchByBook?authKey=${API_KEY}&region=${regionCode}&isbn=9791158392239&format=json`
+    );
     const response = await fetch(url2);
     const data = await response.json();
     console.log("data", data);
 
     if (response.status === 200) {
-      console.log("response.status", response.status);
       if (!response.ok) {
-        //HTTP 응답 상태 코드가 200이 아닌 경우 오류를 발생시켜 catch블록으로 이동
         throw new Error(`HTTP 오류 발생: ${response.status}`);
       }
+
       if (
-        //유효성 검사, response객체 안에 libs배열이 있는지 확인. 없거나 길이가 0이면 오류를 발생시켜 이동.
         !data.response ||
         !data.response.libs ||
         data.response.libs.length === 0
       ) {
         throw new Error("도서를 소장한 도서관이 없습니다.");
       }
-      libList = data.response.libs; //유효한 libs배열을 변수에 할당
-      console.log("libList", libList);
 
-      libsRender(); //도서관 목록을 렌더링.
+      libList = data.response.libs;
+
+      // 거리 계산 및 정렬
+      libList.forEach((libs) => {
+        let distance = getDistance(
+          currentLatitude,
+          currentLongitude,
+          libs.lib.latitude,
+          libs.lib.longitude
+        );
+        libs.lib.distance = distance;
+      });
+
+      libList.sort((a, b) => a.lib.distance - b.lib.distance);
+
+      libCodeList = libList.map((libs) => libs.lib.libCode);
+
+      console.log("libList", libList);
+      console.log("libCodeList", libCodeList);
+
+      availabilityCheckAll(libCodeList);
     } else {
-      console.log("response.status", response.status);
       throw new Error(`HTTP 오류 발생: ${response.status} - ${data.message}`);
     }
   } catch (error) {
     if (error.message.includes("Failed to fetch")) {
-      //네트워크 오류 발생했을 때
       errorRender("네트워크 오류 발생! 인터넷 연결을 확인해주세요.");
+    } else {
+      errorRender(error.message);
     }
-    errorRender(error.message);
   }
 };
-getLibList();
+
+const availabilityCheck = async (code) => {
+  const url3 = `http://data4library.kr/api/bookExist?authKey=${API_KEY}&libCode=${code}&isbn13=9791158392239&format=json`;
+  const response = await fetch(url3);
+  const data = await response.json();
+  return data.response.result.loanAvailable;
+};
+
+const availabilityCheckAll = async (libcodes) => {
+  const requests = libcodes.map((code) => availabilityCheck(code));
+  const responses = await Promise.all(requests);
+  availabilityList = responses;
+  console.log(availabilityList);
+  libsRender();
+};
 
 //도서관 목록을 렌더하는 함수
 function libsRender() {
-  const libListHTML = libList.map(
-    (libs) => `<div class="row libs">
-    
+  let libListHTML = "";
+  for (let i = 0; i < 5; i++) {
+    libListHTML += `<div class="row libs">
     <div class="col-lg-8" id="lib-name">
-    <a href="${libs.lib.homepage}">
-    <i class="fa-solid fa-book"></i>${libs.lib.libName}</a></div>
+    <a href="${libList[i].lib.homepage}">
+    <i class="fa-solid fa-book"></i>${libList[i].lib.libName}</a></div>
     <div class="info">
       <dl>
         <div>
           <dt class="col-lg-1" id="lib-call">
           <i class="fa-solid fa-phone"></i>전화번호</dt>
-          <dd class="col-lg-10"><a href="tel:${libs.lib.tel}">${
-      libs.lib.tel || "정보 없음"
+          <dd class="col-lg-10"><a href="tel:${libList[i].lib.tel}">${
+      libList[i].lib.tel || "정보 없음"
     }</a></dd>
         </div>
         <div>
@@ -86,36 +189,71 @@ function libsRender() {
         <i class="fa-solid fa-location-dot"></i>
         주소</dt>
           <dd class="col-lg-10" id="lib-address" onclick="copyAddress(event)">${
-            libs.lib.address || "주소 정보 없음"
+            libList[i].lib.address || "주소 정보 없음"
           }</dd>
         </div>
         <div>
           <dt class="col-lg-1" id="lib-time">
         <i class="fa-solid fa-clock"></i>
         영업시간</dt>
-          <dd class="col-lg-10">${libs.lib.operatingTime || "정보 없음"}</dd>
+          <dd class="col-lg-10">${
+            libList[i].lib.operatingTime || "정보 없음"
+          }</dd>
         </div>
         <div>
           <dt class="col-lg-1" id="lib-close-day">
         <i class="fa-solid fa-calendar-minus"></i>
         휴관일</dt>
-          <dd class="col-lg-10">${libs.lib.closed || "정보 없음"}</dd>
+          <dd class="col-lg-10">${libList[i].lib.closed || "정보 없음"}</dd>
         </div>
       </dl>
     </div>
-  </div>`
-  );
+  </div>
+          <div>
+            <dt class="col-lg-1" id="lib-close-day">
+          <i class="fa-solid fa-calendar-minus"></i>
+          현재 대출 가능 여부</dt>
+            <dd class="col-lg-10">${
+              availabilityList[i] == "Y" ? "대출 가능" : "대출 불가"
+            }</dd>
+          </div>
+        </dl>
+      </div>
+      </div>`;
+    positions.push({
+      title: `${libList[i].lib.libName}`,
+      latlng: new kakao.maps.LatLng(
+        libList[i].lib.latitude,
+        libList[i].lib.longitude
+      ),
+    });
+  }
+  for (let i = 0; i < positions.length; i++) {
+    // 마커 이미지의 이미지 크기 입니다
+    let imageSize = new kakao.maps.Size(24, 35);
+    // 마커 이미지를 생성합니다
+    let markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+    // 마커를 생성합니다
+    let marker = new kakao.maps.Marker({
+      map: map, // 마커를 표시할 지도
+      position: positions[i].latlng, // 마커를 표시할 위치
+      title: positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      image: markerImage, // 마커 이미지
+    });
+  }
+  console.log("html :", libListHTML);
+  console.log(positions);
   document.getElementById("libs-board").innerHTML = libListHTML;
 }
 
 //에러가 발생했을 때 화면에 에러를 보여줄 함수
 const errorRender = (errorMessage) => {
   const errorHTML = `<div class="row libs">
-    <div class="col-lg-8" id="lib-error">
-      <i class="fa-solid fa-book"></i>${errorMessage}</div>
+      <div class="col-lg-8" id="lib-error">
+        <i class="fa-solid fa-book"></i>${errorMessage}</div>
+      </div>
     </div>
-  </div>
-  `;
+    `;
   document.getElementById("libs-board").innerHTML = errorHTML;
 };
 
@@ -131,3 +269,31 @@ function copyAddress(event) {
       console.log("클립보드 복사에 실패했습니다.", err);
     });
 }
+
+const getDistance = (lat1, lon1, lat2, lon2) => {
+  // Convert degrees to radians
+  const radLat1 = (lat1 * Math.PI) / 180;
+  const radLon1 = (lon1 * Math.PI) / 180;
+  const radLat2 = (lat2 * Math.PI) / 180;
+  const radLon2 = (lon2 * Math.PI) / 180;
+
+  // Radius of the Earth in meters
+  const R = 6_371_000; // m
+
+  // Differences in coordinates
+  const dLat = radLat2 - radLat1;
+  const dLon = radLon2 - radLon1;
+
+  // Haversine formula
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(radLat1) *
+      Math.cos(radLat2) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  const distance = R * c;
+
+  return distance.toFixed(2); // Return distance rounded to 2 decimal places
+};

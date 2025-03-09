@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <!-- navbar -->
     <svg
       width="30"
       height="34"
@@ -29,7 +30,11 @@
       />
     </svg>
 
+    <div id="map" style="width: 500px; height: 400px"></div>
+
     <section id="libs-board"><!--도서 소장 도서관 목록 영역--></section>
+
+    <!-- footer -->
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
@@ -42,7 +47,10 @@
       crossorigin="anonymous"
     ></script>
 
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=7333cb142b6c17542fecfd3bb040614e&libraries=services"></script>
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=507c510bd18a15c628b7bb2a30a53adf"
+    ></script>
 
     <script src="http://data4library.kr/api/srchBooks?authKey=b14cca520846c95ce8b27fd7604c9de537395aba801650123783e2478da5a64&keyword=어린왕자&pageNo=1&pageSize=10"></script>
     <script src="http://data4library.kr/api/libSrchByBook?authKey=b14cca520846c95ce8b27fd7604c9de537395aba801650123783e2478da5a64c&region=11"></script>
