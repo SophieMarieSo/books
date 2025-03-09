@@ -123,7 +123,7 @@ const getBooks = async () => {
 
     //  도서관 페이지로 이동
     libraryBtn.addEventListener('click', () => {
-      window.location.href = `/libraryPage/?isbn13=${isbn}`;
+      window.location.href = `/libraryPage/?isbn=${isbn}`;
     });
 
     // 책 설명 표시
