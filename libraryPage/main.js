@@ -173,10 +173,16 @@ function libsRender() {
   for (let i = 0; i < 5; i++) {
     libListHTML += `<div class="row libs">
     <div class="col-lg-8" id="lib-name">
-    <a href="${libList[i].lib.homepage}" target="_blank">
     <i class="fa-solid fa-book"></i>${libList[i].lib.libName}</a></div>
     <div class="info">
       <dl>
+      <div>
+          <dt class="col-lg-1" id="lib-homepage">
+          <i class="fa-solid fa-link"></i>홈페이지</dt>
+          <dd class="col-lg-10"><a href="${
+            libList[i].lib.homepage
+          }" target="_blank">${libList[i].lib.libName || "정보 없음"}</a></dd>
+          </div>
         <div>
           <dt class="col-lg-1" id="lib-call">
           <i class="fa-solid fa-phone"></i>전화번호</dt>
