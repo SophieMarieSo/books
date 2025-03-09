@@ -1,0 +1,109 @@
+.libs {
+  margin: 10px;
+  padding: 10px;
+  padding-bottom: 0px;
+  width: 90%;
+  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.15) 3px 3px 5px;
+}
+
+#lib-name,
+#lib-error {
+  position: relative;
+  width: 100%;
+  padding: 20px;
+  margin-bottom: 20px;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+#lib-name {
+  color: skyblue;
+  border-bottom: 2px solid skyblue;
+}
+
+#lib-error {
+  color: palevioletred;
+}
+
+.fa-book {
+  margin-right: 10px;
+}
+
+#lib-name a {
+  text-decoration: none;
+  color: skyblue;
+}
+
+.info dl {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0px 20px;
+}
+
+.info div {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  margin-bottom: 5px;
+}
+
+.info dt {
+  min-width: 120px;
+  font-weight: bold;
+  padding: 5px;
+  letter-spacing: 2px;
+}
+
+.info dd {
+  flex-grow: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  padding: 5px;
+}
+
+.fa-phone {
+  margin-right: 13px;
+}
+
+.fa-location-dot {
+  margin-left: 2px;
+  margin-right: 12px;
+}
+
+.fa-clock {
+  margin-right: 10px;
+}
+
+.fa-calendar-minus {
+  margin-left: 1px;
+  margin-right: 11px;
+}
+
+.fa-book-bookmark,
+.fa-link {
+  margin-right: 11px;
+}
+
+dd a {
+  text-decoration: none;
+  color: black;
+}
+
+#lib-address {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  #lib-name {
+    font-size: 30px;
+  }
+
+  .container {
+    background-position: center;
+  }
+
+  #map {
+    max-width: 100%;
+  }
+}
