@@ -1,9 +1,12 @@
 /*----도서관 정보가 나오는 전체 카드----*/
+#libs-board {
+}
+
 .libs {
+  /* border: 1px solid black; */
   margin: 10px;
   padding: 10px;
   padding-bottom: 0px;
-  /* border: 1px solid black; */
   width: 90%;
   border-radius: 20px;
   box-shadow: rgba(0, 0, 0, 0.15) 3px 3px 5px;

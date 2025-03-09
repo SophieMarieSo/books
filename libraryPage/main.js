@@ -173,7 +173,7 @@ function libsRender() {
   for (let i = 0; i < 5; i++) {
     libListHTML += `<div class="row libs">
     <div class="col-lg-8" id="lib-name">
-    <a href="${libList[i].lib.homepage}">
+    <a href="${libList[i].lib.homepage}" target="_blank">
     <i class="fa-solid fa-book"></i>${libList[i].lib.libName}</a></div>
     <div class="info">
       <dl>
