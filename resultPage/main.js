@@ -4,26 +4,17 @@ let numFound = 0;
 let pageSize = 10;
 let pageNo = 1;
 const groupSize = 5;
-const goHome = document.getElementById("go-home");
 
 const params = new URLSearchParams(window.location.search);
-const keyWord = params.get("keyword") || "수학"; // 기본값 설정
-
-if (keyWord) {
-  document.getElementById(
-    "resultText"
-  ).textContent = `검색 결과: ${decodeURIComponent(keyWord)}`;
-} else {
-  document.getElementById("resultText").textContent = "검색어가 없습니다.";
-}
+const keyWord = params.get('keyword') || '수학'; // 기본값 설정
 
 const getSearchResult = async () => {
   const url = new URL(
     `http://data4library.kr/api/srchBooks?authKey=${API_KEY}&title=${keyWord}&exactMatch=true&format=json`
   );
-  console.log("uuu", url);
-  url.searchParams.set("pageSize", pageSize);
-  url.searchParams.set("pageNo", pageNo);
+  console.log('uuu', url);
+  url.searchParams.set('pageSize', pageSize);
+  url.searchParams.set('pageNo', pageNo);
 
   const response = await fetch(url);
 
@@ -31,14 +22,14 @@ const getSearchResult = async () => {
 
   booksList = data.response?.docs?.map((item) => item.doc) || [];
   numFound = data.response?.numFound;
-  console.log("totalBooks", numFound);
-  console.log("rrr", response);
-  console.log("ddd", data);
+  console.log('totalBooks', numFound);
+  console.log('rrr', response);
+  console.log('ddd', data);
 
-  console.log("booksList의 원시 데이터:", booksList);
-  console.log("booksList의 타입:", typeof booksList);
-  console.log("booksList 배열 여부:", Array.isArray(booksList));
-  console.log("booksList의 키들:", Object.keys(booksList));
+  console.log('booksList의 원시 데이터:', booksList);
+  console.log('booksList의 타입:', typeof booksList);
+  console.log('booksList 배열 여부:', Array.isArray(booksList));
+  console.log('booksList의 키들:', Object.keys(booksList));
 
   render();
 
@@ -47,9 +38,9 @@ const getSearchResult = async () => {
 
 const render = () => {
   if (!Array.isArray(booksList) || booksList.length === 0) {
-    console.error("booksList가 비었거나 배열이 아님:", booksList);
+    console.error('booksList가 비었거나 배열이 아님:', booksList);
     document.getElementById(
-      "books-board"
+      'books-board'
     ).innerHTML = `<div class="alert alert-danger" role="alert">
   검색 결과가 없습니다.
 </div>`;
@@ -66,7 +57,7 @@ const render = () => {
               src=${
                 books.bookImageURL
                   ? books.bookImageURL
-                  : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU"
+                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU'
               }"
               onerror="this.onerror=null; this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqEWgS0uxxEYJ0PsOb2OgwyWvC0Gjp8NUdPw&usqp=CAU';"
             />
@@ -83,26 +74,26 @@ const render = () => {
           <dt class="col-lg-1">
           <i class="fa-solid fa-book"></i>
           </dt>
-            <dd class="col-lg-10">${books.bookname || "제목 없음"}</dd>
+            <dd class="col-lg-10">${books.bookname || '제목 없음'}</dd>
           </div>
           <div>
           <dt class="col-lg-1">
           <i class="fa-solid fa-feather"> 저자 </i>
           </dt>
-            <dd class="col-lg-10">${books.authors || "저자 미상"}</dd>
+            <dd class="col-lg-10">${books.authors || '저자 미상'}</dd>
           </div>
           <div>
           <dt class="col-lg-1">
           <i class="fa-solid fa-upload">  출판사 </i>
           </dt>
-            <dd class="col-lg-10"> ${books.publisher || "출판사 미상"}</dd>
+            <dd class="col-lg-10"> ${books.publisher || '출판사 미상'}</dd>
           </div>
           <div>
           <dt class="col-lg-1">
           <i class="fa-solid fa-calendar-days"> 출판연도</i>
           </dt>
             <dd class="col-lg-10">${
-              books.publication_year || "출판 연도 없음"
+              books.publication_year || '출판 연도 없음'
             }</dd>
           </div>
             </dl>
@@ -110,17 +101,17 @@ const render = () => {
           </div>
         </div>`;
     })
-    .join("");
-  console.log("booksList의 타입확인", typeof booksList);
-  console.log("booksList 배열여부", Array.isArray(booksList));
-  console.log("booksHTML", booksHTML);
+    .join('');
+  console.log('booksList의 타입확인', typeof booksList);
+  console.log('booksList 배열여부', Array.isArray(booksList));
+  console.log('booksHTML', booksHTML);
 
-  document.getElementById("books-board").innerHTML = booksHTML;
+  document.getElementById('books-board').innerHTML = booksHTML;
 
-  document.querySelectorAll(".book-detail").forEach((button) => {
-    button.addEventListener("click", (event) => {
+  document.querySelectorAll('.book-detail').forEach((button) => {
+    button.addEventListener('click', (event) => {
       const isbn = event.target.dataset.isbn;
-      console.log("ISBN번호:", isbn);
+      console.log('ISBN번호:', isbn);
       if (isbn) {
         window.location.href = `/detailPage/?isbn=${isbn}`;
       }
@@ -128,12 +119,8 @@ const render = () => {
   });
 };
 
-goHome.addEventListener("click", () => {
-  window.location.href = `/`;
-});
-
 const paginationRender = () => {
-  let paginationHTML = "";
+  let paginationHTML = '';
   const totalPages = Math.ceil(numFound / pageSize);
   let pageGroup = Math.ceil(pageNo / groupSize);
   let lastPage = pageGroup * groupSize;
@@ -155,7 +142,7 @@ const paginationRender = () => {
   }
   for (let i = firstPage; i <= lastPage; i++) {
     paginationHTML += `<li class="page-item ${
-      i === pageNo ? "active" : ""
+      i === pageNo ? 'active' : ''
     }" onclick="moveToPage(${i})"><a class="page-link">${i}</a></li>`;
   }
   if (pageNo < totalPages) {
@@ -165,13 +152,81 @@ const paginationRender = () => {
       <li class="page-item" onclick="moveToPage(${totalPages})"><a class="page-link" href="#"> &gt;&gt; </a></li>`;
   }
 
-  document.querySelector(".pagination").innerHTML = paginationHTML;
+  document.querySelector('.pagination').innerHTML = paginationHTML;
 };
 
 const moveToPage = (pageNum) => {
-  console.log("movetopage", pageNum);
+  console.log('movetopage', pageNum);
   pageNo = pageNum;
   getSearchResult();
 };
 
 getSearchResult();
+
+// navbar search section
+const searchArea = document.getElementById('search-area');
+const recordButton = document.getElementById('record-button');
+const searchForm = document.getElementById('search-form');
+
+let recognition;
+function availabilityFunc() {
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert('현재 브라우저는 음성 인식을 지원하지 않습니다.');
+    return;
+  }
+
+  recognition = new SpeechRecognition();
+  recognition.lang = 'ko';
+  recognition.maxAlternatives = 1;
+  recognition.continuous = false;
+  recognition.interimResults = false;
+}
+
+function startRecord() {
+  if (!recognition) {
+    return;
+  }
+
+  recordButton.disabled = true;
+  searchArea.value = '';
+  recognition.onspeechend = () => {
+    recognition.stop();
+  };
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    searchArea.value = transcript;
+  };
+
+  recognition.onerror = (event) => {
+    recordButton.disabled = false;
+    alert('음성 인식에 실패했습니다. 다시 시도해주세요.');
+    console.error('음성 인식 오류:', event.error);
+  };
+
+  recognition.onend = () => {
+    recordButton.disabled = false;
+  };
+
+  recognition.start();
+}
+
+window.addEventListener('load', availabilityFunc);
+
+const onSubmit = (event) => {
+  event.preventDefault();
+  const keyword = searchArea.value.trim();
+
+  if (keyword) {
+    window.location.href = `/resultPage/?keyword=${encodeURIComponent(
+      keyword
+    )}`;
+  }
+
+  searchArea.value = '';
+};
+
+searchForm?.addEventListener('submit', onSubmit);
