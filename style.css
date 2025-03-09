@@ -1,0 +1,424 @@
+/* navbar */
+.bg-body-tertiary {
+  background-color: lightgray !important;
+}
+
+nav {
+  .navbar-brand {
+    padding-left: 12px;
+  }
+
+  .form-control:focus,
+  .navbar-toggler:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .btn {
+    border-radius: 50%;
+    height: 100%;
+  }
+}
+
+/* main-search */
+.full-screen-img {
+  object-fit: cover;
+  width: 100%;
+  height: calc(100vh - 6em);
+  opacity: 0.5;
+}
+
+.section-top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  animation: slideUp 0.6s ease-out forwards;
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(30%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.form-container {
+  position: absolute;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .desc {
+    padding: 10px 30px;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.6);
+    border-radius: 50px;
+    color: white;
+    font-weight: bold;
+  }
+
+  .input-size {
+    width: 50em;
+    height: 60px;
+    border-radius: 40px;
+    padding: 20px;
+  }
+
+  #record-button {
+    position: absolute;
+    right: 6.5em;
+    border-radius: 50%;
+  }
+
+  input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+@media (max-width: 1024px) {
+  .form-container {
+    .desc {
+      padding: 10px 24px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .input-size {
+      width: 36em;
+      height: 50px;
+    }
+  }
+
+  .full-screen-img {
+    height: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  #navbarTogglerDemo01 {
+    margin-top: 12px;
+  }
+
+  .form-container {
+    .desc {
+      padding: 8px 16px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .input-size {
+      padding: 0 12px;
+      width: 16em;
+      height: 36px;
+    }
+
+    #record-button {
+      right: 6em;
+    }
+  }
+
+  .full-screen-img {
+    height: 50%;
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(30%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+/* 인기도서 시작 */
+
+.wrap {
+  width: 100%;
+  height: 100%;
+}
+
+.img-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+#books1 {
+  margin-bottom: 50px;
+}
+
+.img-box {
+  width: auto;
+  position: relative;
+  cursor: pointer;
+}
+
+.img-thumbnail {
+  width: 200px;
+  height: 250px;
+  background-color: white;
+}
+
+.none {
+  position: absolute;
+  bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 200px;
+  max-width: 200px;
+  height: 250px;
+  background: rgb(255, 255, 255, 0.75);
+  color: black;
+  text-align: center;
+  font-size: 13px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  padding: 0 20px;
+}
+
+.none:hover {
+  opacity: 1;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .col {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .img-container {
+    flex-direction: row;
+    /* align-items: center; */
+    display: flex;
+    width: 384px;
+  }
+
+  #books1 {
+    margin-bottom: 50px;
+  }
+
+  .img-box {
+    width: 335px;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+
+  .img-thumbnail {
+    width: 200px;
+    height: 250px;
+    background-color: white;
+  }
+
+  .none {
+    position: relative;
+    /* left: 170px; */
+    bottom: -5px;
+    background-color: #34495e;
+    color: white;
+    text-align: center;
+    font-size: 13px;
+    opacity: 1;
+    transition: none;
+    text-transform: none;
+    /* border-radius: 5px; */
+    padding: 0 6px;
+  }
+
+  .none:hover {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .img-container {
+    flex-direction: column;
+    /* align-items: center; */
+  }
+
+  #books1 {
+    margin-bottom: 50px;
+  }
+
+  .img-box {
+    width: auto;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+
+  .img-thumbnail {
+    width: 180px;
+    height: 250px;
+    background-color: white;
+  }
+
+  .none {
+    position: relative;
+    /* left: 170px; */
+    bottom: -5px;
+    background-color: #34495e;
+    color: white;
+    text-align: center;
+    font-size: 13px;
+    opacity: 1;
+    transition: none;
+    text-transform: none;
+    /* border-radius: 5px; */
+    padding: 0 6px;
+  }
+
+  .none:hover {
+    opacity: 0;
+  }
+}
+
+/* 인기도서 끝 */
+
+/* footer 시작 */
+
+.footer {
+  min-height: 200px;
+  background-color: #eeeeee;
+}
+
+.footer-info {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 2rem;
+  min-height: 160px;
+  /* border: 1px solid black; */
+}
+
+.footer-info a {
+  font-size: 14px;
+  color: #787878;
+}
+
+.footer-info a:hover {
+  opacity: 0.5;
+}
+
+.footer-service strong {
+  margin-left: 6px;
+}
+
+.footer-company strong,
+.footer-inquiry strong {
+  color: #5f5e5e;
+}
+
+.footer-company a,
+.footer-inquiry a {
+  font-size: 13px;
+}
+
+.footer-company a:hover,
+.footer-inquiry a:hover {
+  opacity: 0.5;
+}
+
+.footer-sns ul {
+  display: flex;
+}
+
+.footer-sns li {
+  margin-right: 6px;
+}
+
+.footer-link {
+  padding-bottom: 20px;
+}
+
+.footer-link ul {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.footer-link a {
+  color: #5f5e5e;
+  font-size: 13px;
+}
+
+.footer-link a:hover {
+  opacity: 0.5;
+}
+
+.footer-link ul span {
+  color: #5f5e5e;
+  margin: 0 6px;
+}
+
+@media (max-width: 768px) {
+  .footer-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-service,
+  .footer-company,
+  .footer-inquiry {
+    margin-bottom: 12px;
+  }
+
+  .footer-service li,
+  .footer-company li,
+  .footer-inquiry li {
+    margin-bottom: 6px;
+  }
+
+  .footer-sns ul {
+    justify-content: center;
+  }
+
+  .footer-sns li {
+    margin-left: 16px;
+  }
+
+  .footer-link li {
+    margin-right: 6px;
+  }
+
+  .footer-link li a {
+    font-size: 11px;
+  }
+
+  .footer-link span {
+    display: none;
+  }
+}
+/* footer 끝 */
