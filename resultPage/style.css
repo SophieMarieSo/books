@@ -123,6 +123,10 @@ nav {
   letter-spacing: 2px;
 }
 
+.book-title {
+  min-width: 30px !important;
+}
+
 .info dd {
   flex-grow: 1;
   word-wrap: break-word;
@@ -254,6 +258,10 @@ a {
 }
 
 @media (max-width: 768px) {
+  #navbarTogglerDemo01 {
+    margin-top: 12px;
+  }
+
   .footer-info {
     flex-direction: column;
     align-items: center;

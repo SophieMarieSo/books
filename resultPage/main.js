@@ -5,8 +5,15 @@ let pageSize = 10;
 let pageNo = 1;
 const groupSize = 5;
 
+const searchArea = document.getElementById('search-area');
+const recordButton = document.getElementById('record-button');
+const searchForm = document.getElementById('search-form');
+
+let recognition;
+
 const params = new URLSearchParams(window.location.search);
 const keyWord = params.get('keyword') || '수학'; // 기본값 설정
+searchArea.value = keyWord;
 
 const getSearchResult = async () => {
   const url = new URL(
@@ -71,28 +78,28 @@ const render = () => {
           <div class="col-lg-10 info"">
           <dl class = "to-button-distance">
           <div id = "lib-name">
-          <dt class="col-lg-1">
+          <dt class="col-lg-1 book-title">
           <i class="fa-solid fa-book"></i>
           </dt>
-            <dd class="col-lg-10">${books.bookname || '제목 없음'}</dd>
+            <dd class="col-lg-11">${books.bookname || '제목 없음'}</dd>
           </div>
           <div>
           <dt class="col-lg-1">
           <i class="fa-solid fa-feather"> 저자 </i>
           </dt>
-            <dd class="col-lg-10">${books.authors || '저자 미상'}</dd>
+            <dd class="col-lg-11">${books.authors || '저자 미상'}</dd>
           </div>
           <div>
           <dt class="col-lg-1">
           <i class="fa-solid fa-upload">  출판사 </i>
           </dt>
-            <dd class="col-lg-10"> ${books.publisher || '출판사 미상'}</dd>
+            <dd class="col-lg-11"> ${books.publisher || '출판사 미상'}</dd>
           </div>
           <div>
           <dt class="col-lg-1">
           <i class="fa-solid fa-calendar-days"> 출판연도</i>
           </dt>
-            <dd class="col-lg-10">${
+            <dd class="col-lg-11">${
               books.publication_year || '출판 연도 없음'
             }</dd>
           </div>
@@ -164,11 +171,6 @@ const moveToPage = (pageNum) => {
 getSearchResult();
 
 // navbar search section
-const searchArea = document.getElementById('search-area');
-const recordButton = document.getElementById('record-button');
-const searchForm = document.getElementById('search-form');
-
-let recognition;
 function availabilityFunc() {
   const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
