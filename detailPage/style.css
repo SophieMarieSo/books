@@ -1,6 +1,25 @@
-.body {
-  scroll-behavior: smooth;
+/* navbar */
+.bg-body-tertiary {
+  background-color: lightgray !important;
 }
+
+nav {
+  .navbar-brand {
+    padding-left: 12px;
+  }
+
+  .form-control:focus,
+  .navbar-toggler:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  .btn {
+    border-radius: 50%;
+    height: 100%;
+  }
+}
+
 .row-cols-1 div {
   border: 1px solid lightgray;
 }
@@ -87,7 +106,6 @@ button:hover {
   font-size: 24px;
   color: #333;
   padding-bottom: 10px;
-  margin-bottom: 20px;
 }
 
 #bookDesc {
@@ -101,7 +119,7 @@ button:hover {
 }
 
 .row {
-  margin-bottom: 30px;
+  margin-bottom: 16px;
 }
 #bookDesc p {
   margin-bottom: 10px;
@@ -124,17 +142,16 @@ button:hover {
 }
 
 .categoryList {
-  border-top: 1px solid skyblue;
-  border-bottom: 1px solid skyblue;
-  margin-bottom: 60px;
-  padding-top: 26px;
+  border-top: 2px solid skyblue;
+  border-bottom: 2px solid skyblue;
+  padding-top: 16px;
 }
 
 #list1,
 #list2,
 #list3 {
   font-weight: bold;
-  font-size: 15px;
+  font-size: 18px;
 }
 
 .categoryTabs {
@@ -149,7 +166,143 @@ button:hover {
   font-weight: bold;
   color: skyblue;
 }
+
 .content-section {
   margin-top: 50px;
-  padding: 20px;
 }
+
+/* footer 시작 */
+
+body {
+  box-sizing: border-box;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.footer {
+  min-height: 200px;
+  background-color: #eeeeee;
+}
+
+.footer-info {
+  display: flex;
+  justify-content: space-around;
+  padding-top: 2rem;
+  min-height: 160px;
+  /* border: 1px solid black; */
+}
+
+.footer-info a {
+  font-size: 14px;
+  color: #787878;
+}
+
+.footer-info a:hover {
+  opacity: 0.5;
+}
+
+.footer-service strong {
+  margin-left: 6px;
+}
+
+.footer-company strong,
+.footer-inquiry strong {
+  color: #5f5e5e;
+}
+
+.footer-company a,
+.footer-inquiry a {
+  font-size: 13px;
+}
+
+.footer-company a:hover,
+.footer-inquiry a:hover {
+  opacity: 0.5;
+}
+
+.footer-sns ul {
+  display: flex;
+}
+
+.footer-sns li {
+  margin-right: 6px;
+}
+
+.footer-link {
+  padding-bottom: 20px;
+}
+
+.footer-link ul {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.footer-link a {
+  color: #5f5e5e;
+  font-size: 13px;
+}
+
+.footer-link a:hover {
+  opacity: 0.5;
+}
+
+.footer-link ul span {
+  color: #5f5e5e;
+  margin: 0 6px;
+}
+
+@media (max-width: 768px) {
+  .footer-info {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-service,
+  .footer-company,
+  .footer-inquiry {
+    margin-bottom: 12px;
+  }
+
+  .footer-service li,
+  .footer-company li,
+  .footer-inquiry li {
+    margin-bottom: 6px;
+  }
+
+  .footer-sns ul {
+    justify-content: center;
+  }
+
+  .footer-sns li {
+    margin-left: 16px;
+  }
+
+  .footer-link li {
+    margin-right: 6px;
+  }
+
+  .footer-link li a {
+    font-size: 11px;
+  }
+
+  .footer-link span {
+    display: none;
+  }
+}
+/* footer 끝 */

@@ -218,11 +218,11 @@ window.addEventListener('load', availabilityFunc);
 
 const onSubmit = (event) => {
   event.preventDefault();
-  const keyword = searchArea.value.trim();
+  const searchValue = searchArea.value.trim();
 
-  if (keyword) {
+  if (searchValue) {
     window.location.href = `/resultPage/?keyword=${encodeURIComponent(
-      keyword
+      searchValue
     )}`;
   }
 
