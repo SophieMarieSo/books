@@ -1,9 +1,9 @@
 # 프로젝트 셋업
-1. `release` 브랜치로 이동
-2. repo clone 후 local에서 실행
+1. repo clone
 ```
 https://github.com/SophieMarieSo/books.git
 ```
+2.  `release` 브랜치로 이동 후 local에서 실행
 
 
 ## 프로젝트 소개
