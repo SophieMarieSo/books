@@ -15,3 +15,4 @@ https://github.com/SophieMarieSo/books.git
 ## 대표 기능소개
 1. 음성으로 검색
 2. 가까운 도서관의 위치를 kakao map에 표시
+3. 모바일 버전에서 도서관의 전화번호를 누르면 통화가 연결된다
